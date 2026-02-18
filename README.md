@@ -1,3 +1,4 @@
 # TheWranglers
 CSCE 483 Senior Capstone
+
 The objective of this project is to design and prototype a system that will reduce the amount of time necessary to pick up students from school. The system will allow parents to update their information (license plate numbers, approved adults for pickup, car rider schedules) via a website with approval from a staff member of the school. The system will read the marker on the car (license plate, QR code, nametag) as it enters the pickup line and send the information to a server. The server will identify the parent and child associated with the car marker, and update a display at the entrance of the pickup line to direct the car to the proper station. The laptop at the front of the school is updated to inform the students and staff which child is being picked up, and which zone to go to
