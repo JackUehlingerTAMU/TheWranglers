@@ -1,0 +1,63 @@
+/* ===== Color Palette ===== */
+:root {
+  --maroon: #3A1122;       /* Midnight Violet */
+  --light-maroon: #5A1935; /* Crimson Violet */
+  --white: #FFFFFF;
+  --granite: #373737;
+  --camel: #BF965C;
+}
+
+/* ===== Page Styling ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  background-color: var(--maroon);
+  color: var(--white);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Heading ===== */
+.title {
+  font-size: 3.5rem;   /* Bigger heading */
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+/* ===== Buttons Layout ===== */
+.button-row {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.create-account {
+  margin-top: 20px;
+}
+
+/* ===== Button Style ===== */
+.main-btn {
+  background-color: var(--camel);
+  color: var(--granite);
+  border: none;
+  padding: 20px 40px;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  min-width: 260px;
+}
+
+/* Hover → lighter maroon */
+.main-btn:hover {
+  background-color: var(--light-maroon);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
