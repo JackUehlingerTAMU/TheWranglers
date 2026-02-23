@@ -73,3 +73,21 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# Setting Up the Database:
+
+This project uses supabase for backend data storage. 
+
+## Supabase Setup:
+1. Go to the Supabase Dashboard (https://supabase.com/dashboard/) and create a new project
+2. After creating the project, click on connect at the top next to your database name
+3. Select App frameworks and select React and Create react  app from the dropdown menus and copy the env.local keys for later
+4. Add tables to the postgres server 
+
+
+# Environment variables:
+There are several different environment variables you need to add in order to get the website to run. A template has been provided in .env.example to ensure that you include all necessary ones. 
+1. Add Supabase environment variables REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_PUBLISHABLE_DEFAULT_KEY (see section on supabase setup to see how to get them)
+2. Add Google Auth tokens (see section on google auth to learn how to get these)
+
+
