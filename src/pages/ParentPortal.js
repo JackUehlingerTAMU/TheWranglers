@@ -20,7 +20,7 @@ export default function ParentPortal(){
                 </table>
 
                 {/* Update Buttons */}
-                <div className = "btn-row">
+                <div className = "button-row">
                     <button className="main-btn">Update License Plate</button>
                     <button className="main-btn">Add a New Child</button>
                 </div>
