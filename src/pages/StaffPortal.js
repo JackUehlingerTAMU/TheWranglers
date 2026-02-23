@@ -1,7 +1,9 @@
 import React from "react";
 import "../App.css";
+import { useNavigate } from "react-router-dom";
 
 function StaffPortal() {
+  const navigate = useNavigate();
   return (
     <div className="staff-portal">
       
@@ -10,7 +12,9 @@ function StaffPortal() {
       {/* Top Navigation Buttons */}
       <div className="portal-top-bar">
         <div className="left-buttons">
-          <button className="main-btn">Kids Pickup Screen</button>
+          <button className="main-btn" onClick={() => navigate("/kids-pickup")}>
+            Kids Pickup
+          </button>
           <button className="main-btn">Station Screen</button>
         </div>
 
