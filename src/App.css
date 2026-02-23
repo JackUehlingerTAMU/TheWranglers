@@ -37,11 +37,6 @@ body {
   margin-bottom: 40px;
 }
 
-.create-account {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 40px;
-}
 
 /* ===== Button Style ===== */
 .main-btn {
@@ -183,8 +178,14 @@ td{
   margin-bottom: 30px;
   border-radius: 6px;
   cursor: pointer;
+  align-self: flex-start; 
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
+.back-btn:hover {
+  background-color: var(--light-maroon);
+  color: var(--white);
+  transform: translateY(-2px);
+}
 .kids-layout {
   display: flex;
   gap: 40px;
@@ -280,4 +281,104 @@ td{
   font-weight: bold;
   width: 120px;
   color: var(--granite);
+}
+
+/* ===== Create Account Page ===== */
+
+.create-account {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    var(--maroon),
+    var(--light-maroon)
+  );
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* Title */
+.create-account h1 {
+  margin-bottom: 30px;
+}
+
+/* ===== Form Container ===== */
+
+.form-container {
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  max-width: 1100px;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Columns */
+.form-column {
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+}
+
+.form-column h2 {
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.form-column label {
+  margin-top: 14px;
+  font-size: 1rem;
+}
+
+/* Inputs */
+.form-column input {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 6px;
+  background-color: rgba(255,255,255,0.15);
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.form-column input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+/* Buttons */
+.add-student,
+.submit-btn {
+  background-color: var(--camel);
+  color: var(--granite);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.add-student {
+  margin-top: 20px;
+  padding: 10px 18px;
+  width: fit-content;
+}
+
+.submit-btn {
+  margin: 35px auto 0;
+  padding: 14px 40px;
+  font-size: 1.1rem;
+}
+
+.add-student:hover,
+.submit-btn:hover {
+  background-color: var(--light-maroon);
+  color: var(--white);
+  transform: translateY(-2px);
 }
