@@ -1,5 +1,5 @@
 import "../App.css"
-import "./parentPortal.css"
+
 export default function ParentPortal(){
     return(<div className="parent-portal">
         <h1>Parent Name's Students:</h1>
