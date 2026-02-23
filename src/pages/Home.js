@@ -11,6 +11,7 @@ export default function Home(){
 
       <div className="create-account">
         <button className="main-btn">Create New Account</button>
+        <button className="main-btn">Volunteer Login</button>
       </div>
 
     </div>
