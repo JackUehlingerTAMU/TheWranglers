@@ -67,21 +67,57 @@ body {
 table{
   border: 1px solid black;
   border-collapse: collapse;
-  width:65%;
-  padding: 1em;
-  margin: 1em;
+  padding: 3rem;
+  margin: 1rem;
+  color:black;
+  
 }
-th, td{
+th{
+  background-color: var(--maroon);
+  color:white;
   border: 1px solid black;
   border-collapse: collapse;
+  padding: 1rem;
+ 
 }
-
+td{
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 1rem;
+ 
+}
+.mainSection{
+   background-color: var(--white);
+   padding:1em;
+   border-radius: 8px;
+   color: black;
+}
 .parent-portal{
   background-color: var(--maroon);
   color: var(--white);
   height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 
+}
+.sidebar{
+  background-color: var(--camel);
+  margin: 1em;
+  padding: 1em;
+  border-radius: 8px;
+  width: 30%
+  
+}
+.row{
+  display: flex;
+  flex-direction:row;
+  width:100%;
+}
+.column{
+  display: flex;
+  flex-direction:column;
+  width:100%;
 }
 
