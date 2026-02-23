@@ -41,10 +41,11 @@ export default function ParentPortal(){
                 </table>
 
                 {/* Update Buttons */}
-                <div className = "btn-row">
+                <div className = "button-row">
                     <button className="main-btn" onClick={() => setIslpClicked(!lpClicked)} >Update License Plate</button>
                     <button className="main-btn" onClick={()=>setNewStudentClicked(!newStudentClicked)}>Add a New Child</button>
                     <button className="main-btn" onClick={()=>setQrClicked(!qrClicked)}>Get QR Code</button> 
+               
                 </div>
             </div>
             <div className="sidebar">
