@@ -1,20 +1,19 @@
 import React from "react";
 import "./App.css";
+import {Routes,Route} from  "react-router-dom"
+import ParentPortal from "./pages/ParentPortal";
+import Home from "./pages/Home"
 
 function App() {
-  return (
-    <div className="app">
-      <h1 className="title">Pebble Creek Elementary</h1>
-
-      <div className="button-row">
-        <button className="main-btn">Parent/Guardian Login</button>
-        <button className="main-btn">Staff Login</button>
-      </div>
-
-      <div className="create-account">
-        <button className="main-btn">Create New Account</button>
-      </div>
-    </div>
+  return ( <>
+      {/* Moved login page code to Home.js so that Routes would work correctly */}
+      {/* ROUTES */}
+      <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/parent-portal" element={<ParentPortal/>}/>
+      </Routes>
+    </>
+    
   );
 }
 
