@@ -61,3 +61,25 @@ body {
   transform: translateY(-2px);
 }
 
+/* Tables */
+table{
+  border: 1px solid black;
+  border-collapse: collapse;
+  width:65%;
+  padding: 1em;
+  margin: 1em;
+}
+th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.parent-portal{
+  background-color: var(--maroon);
+  color: var(--white);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+}
+
