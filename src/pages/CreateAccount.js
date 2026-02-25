@@ -51,7 +51,7 @@ function CreateAccount() {
 
       </div>
 
-      <button className="submit-btn">Submit For Approval</button>
+      <input  className= "submit-btn" type="submit" value="Submit to School"></input>
     </div>
   );
 }

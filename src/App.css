@@ -81,12 +81,8 @@ td{
   padding: 1rem;
  
 }
-.mainSection{
-   background-color: var(--white);
-   padding:1em;
-   border-radius: 8px;
-   color: black;
-}
+
+/* === PARENT PICKUP PAGE === */
 .parent-portal{
   background-color: var(--maroon);
   color: var(--white);
@@ -95,25 +91,68 @@ td{
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
+}
+.mainSection{
+   background-color: var(--white);
+   margin: 1em;
+   padding:1em;
+   border-radius: 8px;
+   color: black;
+   flex:1;
 }
 .sidebar{
+  flex:1;
   background-color: var(--camel);
   margin: 1em;
   padding: 1em;
   border-radius: 8px;
   width: 30%
-  
 }
 .row{
   display: flex;
   flex-direction:row;
   width:100%;
+  justify-content: center;
 }
 .column{
   display: flex;
   flex-direction:column;
   width:100%;
+}
+
+.button-rows {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;   
+    align-items: center;     
+  }
+
+  .mainSection,
+  .sidebar {
+    width: 100%;
+  }
+  .button-rows{
+    display: flex;
+    flex-direction: column;
+
+  }
+}
+
+/* ==== New Child Section ==== */
+.mini-form-container {
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 /* ===== Staff Portal Layout ===== */

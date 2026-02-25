@@ -6,8 +6,13 @@ import StaffPortal from "./pages/StaffPortal";
 import KidsPickup from "./pages/KidsPickup";
 import Home from "./pages/Home"
 import CreateAccount from "./pages/CreateAccount";
+import { useEffect} from "react";
+import { supabase } from "./supabaseClient";
 
 function App() {
+ 
+
+  
   return ( <>
       {/* Moved login page code to Home.js so that Routes would work correctly */}
       {/* ROUTES */}
