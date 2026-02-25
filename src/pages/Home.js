@@ -56,7 +56,9 @@ export default function Home(){
           <button className="main-btn" onClick={() => navigate("/create-account")}>
             Create New Account
           </button>
-        <button className="main-btn">Volunteer Login</button>
+          <button className="main-btn" onClick={() => navigate("/volunteer-login")}>
+            Volunteer Login
+          </button>
       </div>
 
     </div>
