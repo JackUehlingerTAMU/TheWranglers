@@ -14,6 +14,8 @@ export default function ParentPortal(){
     const [newStudentClicked, setNewStudentClicked] = useState(false);
     const [qrClicked, setQrClicked] = useState(false);
     const [parentName, setParentName] = useState();
+    const [studentInfo, setStudentInfo] =useState([]);
+ 
     
     
 
@@ -26,26 +28,45 @@ export default function ParentPortal(){
         }
         if(authError){
             console.log(authError);
+            return;
         }
+
+        // Get Parent Name
         const { data: parentData, error: parentError  } = await supabase
             .from("parent")       // replace with your table name
-            .select("parent_first_name,parent_last_name")    // columns you want
+            .select("id,parent_first_name,parent_last_name")    // columns you want
             .eq("google_id", authData.user.id)
             .single();             // get a single record
 
-        setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
-        console.log(parentData);
         if (parentError){
             console.log(parentError);
+            return;
         }
-        
-        
+        else{
+            setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
+        }
+
+        // Get Parent-Student Connections
+        const {data: studentData, error: studentError} = await supabase
+            .from("parent_student")
+            .select("parent_id,student_id,pickup_status, students(student_first_name,student_middle_name,student_last_name,student_grade), parent(plate_number,plate_state)")
+            .eq("parent_id", parentData.id);
+
+        if (studentError){
+            console.log(studentError);
+            return;
+        }
+        else{
+            setStudentInfo(studentData);
+            console.log(studentData);
+        }
 
         };
-
+        
         checkUser();
     }, [navigate]);
 
+    
     
 
 
@@ -57,6 +78,8 @@ export default function ParentPortal(){
             <div className = "mainSection">
                 <h2>My Students:</h2>
                 {/* Table of children */}
+                {studentInfo.students? 
+                <p> No Students yet, please add them by clicking the add student button!</p> :
                 <table className="parent-table">
                     <thead>
                     <tr>
@@ -67,20 +90,19 @@ export default function ParentPortal(){
                     </tr>
                     </thead>
                     <tbody>
+                    {studentInfo.map(student =>
                     <tr>
-                        <td>Student </td>
-                        <td>Student Grade</td>
-                        <td>Pickup Status</td>
-                        <td>Approved LP</td>
+                        <td> {student.students.student_first_name + " " +student.students.student_middle_name + " " + student.students.student_last_name} </td>
+                        <td>{student.students.student_grade}</td>
+                        <td>{student.pickup_status? "Approved":"Pending Approval"}</td>
+                        <td>{student.parent.plate_state + " " + student.parent.plate_number}</td>
                     </tr>
-                    <tr>
-                        <td>Student </td>
-                        <td>Student Grade</td>
-                        <td>Pickup Status</td>
-                        <td>Approved LP</td>
-                    </tr>
+                    )}
+                    
                     </tbody>
                 </table>
+                
+                }
 
                 {/* Update Buttons */}
                 <div className = "button-rows">

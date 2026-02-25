@@ -7,6 +7,7 @@ import KidsPickup from "./pages/KidsPickup";
 import PickupStation from "./pages/PickupStation";
 import Home from "./pages/Home"
 import CreateAccount from "./pages/CreateAccount";
+import VolunteerLogin from "./pages/VolunteerLogin";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/kids-pickup" element={<KidsPickup />} />
       <Route path="/pickup-station" element={<PickupStation />} />
       <Route path="/create-account" element={<CreateAccount />} />
+      <Route path="/volunteer-login" element={<VolunteerLogin />} />
       </Routes>
     </>
     
