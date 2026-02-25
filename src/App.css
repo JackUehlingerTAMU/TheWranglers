@@ -84,14 +84,16 @@ td{
 
 /* === PARENT PICKUP PAGE === */
 .parent-portal{
-  background-color: var(--maroon);
+  background-color: var(--light-maroon);
   color: var(--white);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  justify-content: flex-start; /* start from top */
+  align-items: center;
+
 }
+
 .mainSection{
    background-color: var(--white);
    margin: 1em;
@@ -143,6 +145,26 @@ td{
 
   }
 }
+
+/* ==== LOGOUT Button ==== */
+.bar {
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 10px 20px;
+  background-color: var(--maroon);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+  top:0px;
+  position:sticky;
+}
+.bar-item{
+  margin: 20px;
+}
+
+
 
 /* ==== New Child Section ==== */
 .mini-form-container {

@@ -1,14 +1,55 @@
 import "./../App.css";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import { useState } from "react";
+
 export default function Home(){
   const navigate = useNavigate();
+
+  // Google AUTH ///
+  const [parentError, setParentError] = useState("");
+  const [staffError, setStaffError] = useState("");
+  const handleParentLogin = async () => {
+    setParentError("");
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/parent-portal`,
+      },
+    });
+
+    if (error) {
+      setParentError("Authentication failed. Please try again.");
+    }
+  };
+
+
+  const handleStaffLogin = async () => {
+    setStaffError("");
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/staff-portal`,
+      },
+    });
+
+    if (error) {
+      setStaffError("Authentication failed. Please try again.");
+    }
+  };
+  /////////////////
     return (
     <div className="app">
       <h1 className="title">Pebble Creek Elementary</h1>
 
+      {parentError && <p >{parentError}</p>}
+      {staffError && <p >{staffError}</p>}
+
       <div className="button-row">
-        <button className="main-btn">Parent/Guardian Login</button>
-        <button className="main-btn">Staff Login</button>
+        <button className="main-btn" onClick={handleParentLogin}>Parent/Guardian Login</button>
+        <button className="main-btn" onClick={handleStaffLogin}>Staff Login</button>
       </div>
 
       <div className="button-row">

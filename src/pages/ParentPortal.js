@@ -1,16 +1,58 @@
 import "../App.css"
 import NewChild from "../components/NewChild";
 import PlateUpdate from "../components/PlateUpdate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QRcode from "../components/QRcode";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import Header from "../components/header";
+
 
 export default function ParentPortal(){
+    const navigate = useNavigate();
     const [lpClicked, setIslpClicked] = useState(false);
     const [newStudentClicked, setNewStudentClicked] = useState(false);
     const [qrClicked, setQrClicked] = useState(false);
+    const [parentName, setParentName] = useState();
+    
+    
+
+    // Login Protection:
+    useEffect(() => {
+        const checkUser = async () => {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (!authData.user) {
+            navigate("/");
+        }
+        if(authError){
+            console.log(authError);
+        }
+        const { data: parentData, error: parentError  } = await supabase
+            .from("parent")       // replace with your table name
+            .select("parent_first_name,parent_last_name")    // columns you want
+            .eq("google_id", authData.user.id)
+            .single();             // get a single record
+
+        setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
+        console.log(parentData);
+        if (parentError){
+            console.log(parentError);
+        }
+        
+        
+
+        };
+
+        checkUser();
+    }, [navigate]);
+
+    
+
+
 
     return(<div className="parent-portal">
-        <h1>Parent Name's Students:</h1>
+        <Header/>
+        <h1>{parentName}'s Students:</h1>
         <div className= "row">
             <div className = "mainSection">
                 <h2>My Students:</h2>
