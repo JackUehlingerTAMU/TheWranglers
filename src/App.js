@@ -10,7 +10,22 @@ import { useEffect} from "react";
 import { supabase } from "./supabaseClient";
 
 function App() {
- 
+  // Database check
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("students")
+        .select("*");
+
+      if (error) {
+        console.error("Error:", error);
+      } else {
+        console.log("Data:", data);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   
   return ( <>
