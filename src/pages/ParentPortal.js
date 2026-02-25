@@ -28,6 +28,7 @@ export default function ParentPortal(){
         }
         if(authError){
             console.log(authError);
+            return;
         }
 
         // Get Parent Name
@@ -53,6 +54,7 @@ export default function ParentPortal(){
 
         if (studentError){
             console.log(studentError);
+            return;
         }
         else{
             setStudentInfo(studentData);
@@ -76,6 +78,8 @@ export default function ParentPortal(){
             <div className = "mainSection">
                 <h2>My Students:</h2>
                 {/* Table of children */}
+                {studentInfo.students? 
+                <p> No Students yet, please add them by clicking the add student button!</p> :
                 <table className="parent-table">
                     <thead>
                     <tr>
@@ -97,6 +101,8 @@ export default function ParentPortal(){
                     
                     </tbody>
                 </table>
+                
+                }
 
                 {/* Update Buttons */}
                 <div className = "button-rows">
