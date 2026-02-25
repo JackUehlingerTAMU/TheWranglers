@@ -15,7 +15,9 @@ function StaffPortal() {
           <button className="main-btn" onClick={() => navigate("/kids-pickup")}>
             Kids Pickup
           </button>
-          <button className="main-btn">Station Screen</button>
+          <button className="main-btn" onClick={() => navigate("/pickup-station")}>
+            Station Screen
+          </button>
         </div>
 
         <button className="main-btn logout-btn">Logout</button>

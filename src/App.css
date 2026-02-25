@@ -245,3 +245,31 @@ th, td{
   width: 120px;
   color: var(--granite);
 }
+
+/* ===== Pickup Station Page ===== */
+.pickup-station {
+  background-color: var(--maroon);
+  color: var(--white);
+  min-height: 100vh;
+  padding: 40px;
+}
+
+/* Pickup Table Colors */
+.pickup-table.red {
+  background-color: #e6b3b3;
+}
+.pickup-table.orange {
+  background-color: #f5d1a8;
+}
+.pickup-table.yellow {
+  background-color: #f7e7a9;
+}
+.pickup-table.green {
+  background-color: #cfe3c4;
+}
+.pickup-table.blue {
+  background-color: #c7d7ef;
+}
+.pickup-table.purple {
+  background-color: #d7cde8;
+}

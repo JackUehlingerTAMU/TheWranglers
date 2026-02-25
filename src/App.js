@@ -4,6 +4,7 @@ import {Routes,Route} from  "react-router-dom"
 import ParentPortal from "./pages/ParentPortal";
 import StaffPortal from "./pages/StaffPortal";
 import KidsPickup from "./pages/KidsPickup";
+import PickupStation from "./pages/PickupStation";
 import Home from "./pages/Home"
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route path="/parent-portal" element={<ParentPortal/>}/>
       <Route path="/staff-portal" element={<StaffPortal/>}/>
       <Route path="/kids-pickup" element={<KidsPickup />} />
+      <Route path="/pickup-station" element={<PickupStation />} />
       </Routes>
     </>
     
