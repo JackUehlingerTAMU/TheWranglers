@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 
 function StaffPortal() {
   const navigate = useNavigate();
+
+  const [students, setStudents] = useState([
+    {
+      id: 1,
+      name: "Jane Doe",
+      grade: "5",
+      parents: "John Doe",
+      licensePlate: "TX ABC 1234",
+      status: "Approved",
+    },
+    {
+      id: 2,
+      name: "John Child",
+      grade: "3",
+      parents: "Mary Child",
+      licensePlate: "TX XYZ 6789",
+      status: "Pending",
+    },
+  ]);
 
   const getVolunteerCode = () => {
     const today = new Date().toDateString();
@@ -28,6 +47,15 @@ function StaffPortal() {
 
   const volunteerCode = getVolunteerCode();
 
+  const handleEdit = (id) => {
+    console.log(`Edit student with ID: ${id}`);
+    // Add edit functionality here
+  };
+
+  const handleDelete = (id) => {
+    setStudents(students.filter((student) => student.id !== id));
+  };
+
   return (
     <div className="staff-portal">
       
@@ -51,10 +79,45 @@ function StaffPortal() {
         <button className="main-btn logout-btn">Logout</button>
       </div>
 
-      <div className="table-placeholder">
-        <p>Table content will go here...</p>
+        <div className="child-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Student Name</th>
+              <th>Grade</th>
+              <th>Parent(s)</th>
+              <th>Parent License Plate</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr key={student.id}>
+                <td>{student.name}</td>
+                <td>{student.grade}</td>
+                <td>{student.parents}</td>
+                <td>{student.licensePlate}</td>
+                <td>{student.status}</td>
+                <td>
+                  <button 
+                    className="edit-btn" 
+                    onClick={() => handleEdit(student.id)}
+                  >
+                    ✏
+                  </button>
+                  <button 
+                    className="delete-btn" 
+                    onClick={() => handleDelete(student.id)}
+                  >
+                    ❌
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
     </div>
   );
 }

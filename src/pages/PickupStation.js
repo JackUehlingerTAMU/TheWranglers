@@ -27,7 +27,6 @@ export default function PickupStation(){
             <button className="back-btn" onClick={() => navigate(-1)}>
                 Back
             </button>
-
             <div className="dropdown-container">
                 <label htmlFor="color-select">Select Color:</label>
                 <select
@@ -72,6 +71,7 @@ export default function PickupStation(){
                     </div>
                 </div>
             </div>
+            
         </div>
     );
 }
