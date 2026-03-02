@@ -14,14 +14,15 @@ export default function ParentPortal(){
     const [newStudentClicked, setNewStudentClicked] = useState(false);
     const [qrClicked, setQrClicked] = useState(false);
     const [parentName, setParentName] = useState();
-    const [studentInfo, setStudentInfo] =useState([]);
- 
+    const [studentInfo, setStudentInfo] =useState(null);
+    const [loading, setLoading]= useState(true);
     
     
 
     // Login Protection:
     useEffect(() => {
         const checkUser = async () => {
+            setLoading(true);
         const { data: authData, error: authError } = await supabase.auth.getUser();
         if (!authData.user) {
             navigate("/");
@@ -54,13 +55,13 @@ export default function ParentPortal(){
 
         if (studentError){
             console.log(studentError);
-            return;
+            
         }
         else{
             setStudentInfo(studentData);
             console.log(studentData);
         }
-
+        setLoading(false);
         };
         
         checkUser();
@@ -78,7 +79,9 @@ export default function ParentPortal(){
             <div className = "mainSection">
                 <h2>My Students:</h2>
                 {/* Table of children */}
-                {studentInfo.students? 
+                {loading? 
+                <p>loading...</p>:
+                studentInfo && studentInfo.length === 0 ? 
                 <p> No Students yet, please add them by clicking the add student button!</p> :
                 <table className="parent-table">
                     <thead>
@@ -91,13 +94,14 @@ export default function ParentPortal(){
                     </thead>
                     <tbody>
                     {studentInfo.map(student =>
-                    <tr>
+                    <tr key={student.student_id}>
                         <td> {student.students.student_first_name + " " +student.students.student_middle_name + " " + student.students.student_last_name} </td>
                         <td>{student.students.student_grade}</td>
                         <td>{student.pickup_status? "Approved":"Pending Approval"}</td>
                         <td>{student.parent.plate_state + " " + student.parent.plate_number}</td>
                     </tr>
                     )}
+                
                     
                     </tbody>
                 </table>
