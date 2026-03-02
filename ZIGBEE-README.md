@@ -34,7 +34,7 @@ Also run
 sudo apt remove brltty  
 
 Then, run  
-ls -l dev/tty*  
+ls -l /dev/tty*  
 
 If /dev/ttyUSB0 is visible, skip this step. If not, run  
 lsmod | grep cp210x  
@@ -42,7 +42,7 @@ sudo modprobe cp210x
 /dev/ttyUSB0 should be visible now  
 
 If permission denied error for /dev/ttyUSB0, run  
-sudo cmhod 666 /dev/ttyUSB0  
+sudo chmod 666 /dev/ttyUSB0  
 
 If encountering HOST_FATAL_ERROR when running pnpm start, run  
 nano data/configuration.yaml  
