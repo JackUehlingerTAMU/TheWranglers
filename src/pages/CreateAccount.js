@@ -1,18 +1,114 @@
-import React, { useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import { useState} from "react";
 
 function CreateAccount() {
   const navigate = useNavigate();
 
-  const [students, setStudents] = useState([{}]);
+  const [parent, setParent] = useState({
+    firstName: "",
+    lastName: "",
+    plateNumber: "",
+    plateState: "",
+    email: "",
+  });
+
+  const [students, setStudents] = useState([
+    { firstName: "", middleName: "", lastName: "", grade: "" },
+  ]);
+
 
   const addStudent = () => {
-    setStudents([...students, {}]);
+    setStudents([
+      ...students,
+      { firstName: "", middleName: "", lastName: "", grade: "" },
+    ]);
   };
 
-  const removeStudent = (indexToRemove) => {
-    setStudents(students.filter((_, index) => index !== indexToRemove));
+  const removeStudent = (index) => {
+    setStudents(students.filter((_, i) => i !== index));
+  };
+
+  const handleParentChange = (e) => {
+    setParent({ ...parent, [e.target.name]: e.target.value });
+  };
+
+  const handleStudentChange = (index, e) => {
+    const updated = [...students];
+    updated[index][e.target.name] = e.target.value;
+    setStudents(updated);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+
+      //Insert parent
+      const parentPayload = {
+        parent_first_name: parent.firstName,
+        parent_last_name: parent.lastName,
+        plate_number: parent.plateNumber,
+        plate_state: parent.plateState,
+        email: parent.email,   
+        google_id: parent.id,     
+      };
+
+      const { data: parentData, error: parentError } = await supabase
+        .from("parent")
+        .insert([parentPayload])
+        .select()
+        .single();
+
+      if (parentError) {
+        console.error("Parent insert error:", parentError);
+        alert(parentError.message);
+        return;
+      }
+
+      //Insert students
+      const studentPayload = students.map((s) => ({
+        student_first_name: s.firstName,
+        student_middle_name: s.middleName,
+        student_last_name: s.lastName,
+        student_grade: s.grade,
+      }));
+
+      const { data: studentData, error: studentError } = await supabase
+        .from("students")
+        .insert(studentPayload)
+        .select();
+
+      if (studentError) {
+        console.error("Student insert error:", studentError);
+        alert(studentError.message);
+        return;
+      }
+
+      // Link parent & students in parent_student (int8 ids)
+      const links = (studentData || []).map((stu) => ({
+        parent_id: parentData.id, 
+        student_id: stu.id,       
+        pickup_status: false,
+      }));
+
+      const { error: linkError } = await supabase
+        .from("parent_student")
+        .insert(links);
+
+      if (linkError) {
+        console.error("Link error:", linkError);
+        alert(linkError.message);
+        return;
+      }
+
+      // Success
+      navigate("/parent-portal");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("Unexpected error occurred.");
+    }
   };
 
   return (
@@ -24,22 +120,36 @@ function CreateAccount() {
       <h1>Account Creation</h1>
 
       <div className="form-container">
-
         {/* Parent Info */}
         <div className="form-column">
           <h2>Parent Information</h2>
 
           <label>Parent First Name *</label>
-          <input placeholder="First Name..." />
+          <input
+            name="firstName"
+            placeholder="First Name..."
+            onChange={handleParentChange}
+            required
+          />
 
           <label>Parent Last Name *</label>
-          <input placeholder="Last Name..." />
+          <input
+            name="lastName"
+            placeholder="Last Name..."
+            onChange={handleParentChange}
+            required
+          />
 
           <label>License Plate Number *</label>
-          <input placeholder="Plate Number..." />
+          <input
+            name="plateNumber"
+            placeholder="Plate Number..."
+            onChange={handleParentChange}
+            required
+          />
 
           <label>License Plate State *</label>
-          <select>
+          <select name="plateState" onChange={handleParentChange} required>
             <option value="">Select State...</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -94,20 +204,26 @@ function CreateAccount() {
           </select>
 
           <label>Email (Gmail) *</label>
-          <input placeholder="...@gmail.com" />
+          <input
+            name="email"
+            type="email"
+            placeholder="...@gmail.com"
+            onChange={handleParentChange}
+            required
+          />
         </div>
 
         {/* Student Info */}
         <div className="form-column">
           <h2>Student Information</h2>
 
-          {students.map((_, index) => (
+          {students.map((student, index) => (
             <div key={index} className="student-block">
-
               <div className="student-header">
                 <h3>Student {index + 1}</h3>
                 {index !== 0 && (
                   <button
+                    type="button"
                     className="remove-student"
                     onClick={() => removeStudent(index)}
                   >
@@ -117,27 +233,54 @@ function CreateAccount() {
               </div>
 
               <label>Student First Name *</label>
-              <input placeholder="First Name..." />
+              <input
+                name="firstName"
+                placeholder="First Name..."
+                onChange={(e) => handleStudentChange(index, e)}
+                required
+              />
 
               <label>Student Middle Name</label>
-              <input placeholder="Middle Name..." />
+              <input
+                name="middleName"
+                placeholder="Middle Name..."
+                onChange={(e) => handleStudentChange(index, e)}
+              />
 
               <label>Student Last Name *</label>
-              <input placeholder="Last Name..." />
+              <input
+                name="lastName"
+                placeholder="Last Name..."
+                onChange={(e) => handleStudentChange(index, e)}
+                required
+              />
 
               <label>Student Grade *</label>
-              <input placeholder="Grade..." />
+              <select
+                name="grade"
+                onChange={(e) => handleStudentChange(index, e)}
+                required
+              >
+                <option value="">Select Grade...</option>
+                <option value="KG">Kindergarten</option>
+                <option value="1">1st</option>
+                <option value="2">2nd</option>
+                <option value="3">3rd</option>
+                <option value="4">4th</option>
+                <option value="5">5th</option>
+              </select>
             </div>
           ))}
 
-          <button className="add-student" onClick={addStudent}>
+          <button type="button" className="add-student" onClick={addStudent}>
             Add Another Student
           </button>
         </div>
-
       </div>
 
-      <input className="submit-btn" type="submit" value="Submit to School" />
+      <button className="submit-btn" onClick={handleSubmit}>
+        Submit to School
+      </button>
     </div>
   );
 }
