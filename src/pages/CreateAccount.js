@@ -149,7 +149,7 @@ function CreateAccount() {
           />
 
           <label>License Plate State *</label>
-          <select name="plateState" onChange={handleParentChange} required>
+          <select name="plateState" className="select_text" onChange={handleParentChange} required>
             <option value="">Select State...</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -259,6 +259,7 @@ function CreateAccount() {
               <select
                 name="grade"
                 onChange={(e) => handleStudentChange(index, e)}
+                className="select_text" 
                 required
               >
                 <option value="">Select Grade...</option>
