@@ -1,3 +1,5 @@
+import { supabase } from "react";
+import {useState, useEffect} from "react";
 export default function PlateUpdate(){
     const US_STATES = [
         { name: "Alabama", abbr: "AL" },
@@ -51,9 +53,16 @@ export default function PlateUpdate(){
         { name: "Wisconsin", abbr: "WI" },
         { name: "Wyoming", abbr: "WY" }
         ];
+    const [plateInfo, setPlateInfo]=useState();
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+    }
+            
+
+
     return(<>
         <h2>Plate Update Information:</h2>
-        <form className="mini-form-container">
+        <form className="mini-form-container" onSubmit={handleSubmit} >
             <div className="form-column">
             <label for="plate_state">Plate State:</label>
             <select id="plate_state" name="plate_state" className="select_text">
@@ -61,9 +70,6 @@ export default function PlateUpdate(){
                 <option key={state.name} value={state.abbr} >{state.name}</option>
             )}
             </select>
-           
-
-           
             <label for="plate_number">Plate Number:</label>
             <input type="text" id="plate_number" name="plate_number" />
             

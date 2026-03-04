@@ -16,6 +16,7 @@ export default function ParentPortal(){
     const [parentName, setParentName] = useState();
     const [studentInfo, setStudentInfo] =useState(null);
     const [loading, setLoading]= useState(true);
+    const [parent_id, setParent_id]=useState(null);
     
     
 
@@ -45,6 +46,7 @@ export default function ParentPortal(){
         }
         else{
             setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
+            setParent_id(parentData.id);
         }
 
         // Get Parent-Student Connections
@@ -118,7 +120,7 @@ export default function ParentPortal(){
             </div>
             <div className="sidebar">
                  {lpClicked === true && <PlateUpdate/>}
-                 {newStudentClicked === true && <NewChild/>}
+                 {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
                  {qrClicked === true && <QRcode/>}
               
             </div>

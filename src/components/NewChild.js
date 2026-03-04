@@ -1,5 +1,7 @@
 import "../App.css"
-export default function NewChild(){
+import { supabase } from "../supabaseClient";
+import { useState } from "react";
+export default function NewChild({parent_id}){
     const GRADES= [{name:"Kindergarden", abr: "KG"},
                    {name:"1st", abr: "1"}, 
                    {name:"2nd", abr: "2"}, 
@@ -7,27 +9,79 @@ export default function NewChild(){
                    {name:"4th", abr: "4"}, 
                    {name:"5th", abr: "5"}, 
     ]
+    const [student_first_name, setStudentFirstName]= useState("");
+    const [student_middle_name, setStudentMiddleName]= useState("");
+    const [student_last_name, setStudentLastName]= useState("");
+    const [student_grade, setStudentGrade]= useState("");
+    const pickup_status=false;
+    const parentId={parent_id};
+
+    const handleSubmit= async (e) =>{
+        e.preventDefault();
+        const data = {
+                student_first_name: student_first_name,
+                student_middle_name: student_middle_name,
+                student_last_name: student_last_name,
+                student_grade: student_grade,
+            };
+
+            try {
+            // add student
+            const {data: result, studentError} = await supabase 
+                .from("students")
+                .insert([data])
+                .select("*");
+            if(studentError){
+                console.error("student info failed to submit: ", studentError);
+                alert("student info failed to submit.")
+            }
+          
+            const stud_id= result[0].id; 
+           // insert into join table
+           const joinData = {
+                    student_id: stud_id,
+                    parent_id: parentId.parent_id,
+                    pickup_status: pickup_status
+                };
+            const { error2} = await supabase 
+                .from("parent_student")
+                .insert([joinData])
+                .select("*");
+            if(error2){
+                console.error("student info failed to submit: ", error2);
+                alert("student info failed to submit.")
+            }
+            else{
+                alert("Student info submitted successfully!");
+            }
+            } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to submit student info.");
+            }
+    };
+
+
     return( <>
         <h2>New Child Information</h2>
-        <form className="mini-form-container">
+        <form className="mini-form-container" onSubmit={handleSubmit}>
             <div class="form-column">
        
-            <label for="plate_state">Child First Name:</label>
-            <input type="text" id="plate_state" name="plate_state" />
+            <label for="student_first_name">Child First Name:</label>
+            <input type="text" id="student_first_name" name="student_first_name" onChange={(e)=>setStudentFirstName(e.target.value)}/>
        
 
-            <label for="plate_state">Child Middle Name:</label>
-            <input type="text" id="plate_state" name="plate_state" />
+            <label for="student_middle_name">Child Middle Name:</label>
+            <input type="text" id="student_middle_name" name="student_middle_name" onChange={(e)=>setStudentMiddleName(e.target.value)}/>
           
 
             
-            <label for="plate_state">Child Last Name:</label>
-            <input type="text" id="plate_state" name="plate_state" />
+            <label for="student_last_name">Child Last Name:</label>
+            <input type="text" id="student_last_name" name="student_last_name" onChange={(e)=>setStudentLastName(e.target.value)}/>
            
 
             
-            <label for="plate_state">Child Grade:</label>
-            <select id="plate_state" name="plate_state" className="select_text" >
+            <label for="student_grade">Child Grade:</label>
+            <select id="student_grade" name="student_grade" className="select_text" onChange={(e)=>setStudentGrade(e.target.value)}>
                 {GRADES.map(grade =>
                     <option key={grade.abr} value={grade.abr} >{grade.name}</option>
                 )}
