@@ -1,6 +1,6 @@
-import { supabase } from "react";
-import {useState, useEffect} from "react";
-export default function PlateUpdate(){
+import { supabase } from "../supabaseClient";
+import {useState} from "react";
+export default function PlateUpdate({parent_id}){
     const US_STATES = [
         { name: "Alabama", abbr: "AL" },
         { name: "Alaska", abbr: "AK" },
@@ -53,9 +53,37 @@ export default function PlateUpdate(){
         { name: "Wisconsin", abbr: "WI" },
         { name: "Wyoming", abbr: "WY" }
         ];
-    const [plateInfo, setPlateInfo]=useState();
-    const handleSubmit = async (e) =>{
+    const parentId={parent_id};
+    const idval=parentId.parent_id;
+    const [plateNumber,setPlateNumber]= useState("");
+    const [plateState,setPlateState]= useState("");
+    const handleSubmit= async (e) =>{
         e.preventDefault();
+        
+        const data= {
+            plate_state: plateState,
+            plate_number: plateNumber
+        };
+        
+        try{
+        const { error} =await supabase
+            .from("parent")
+            .update(data)
+            .eq("id", idval)
+            .select("*");
+        if(error){
+            console.error("Plate unable to be updated: ", error);
+            alert("Plate info failed update.")
+        }
+        else{
+        
+            alert("success");
+        }
+    }
+    catch(error){
+        console.error("Error:", error);
+        alert("Failed to submit licence plate info.");
+    }
     }
             
 
@@ -65,13 +93,13 @@ export default function PlateUpdate(){
         <form className="mini-form-container" onSubmit={handleSubmit} >
             <div className="form-column">
             <label for="plate_state">Plate State:</label>
-            <select id="plate_state" name="plate_state" className="select_text">
+            <select id="plate_state" name="plate_state" className="select_text" value={plateState} onChange={(e)=>setPlateState(e.target.value)}>
             { US_STATES.map( state => 
                 <option key={state.name} value={state.abbr} >{state.name}</option>
             )}
             </select>
             <label for="plate_number">Plate Number:</label>
-            <input type="text" id="plate_number" name="plate_number" />
+            <input type="text" id="plate_number" name="plate_number" onChange={(e)=>setPlateNumber(e.target.value)} />
             
             <input  className= "submit-btn" type="submit" value="Submit to School"></input>
             </div>

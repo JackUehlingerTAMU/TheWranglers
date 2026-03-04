@@ -41,7 +41,7 @@ export default function ParentPortal(){
             .single();             // get a single record
 
         if (parentError){
-            console.log(parentError);
+            console.error(parentError);
             return;
         }
         else{
@@ -56,12 +56,12 @@ export default function ParentPortal(){
             .eq("parent_id", parentData.id);
 
         if (studentError){
-            console.log(studentError);
+            console.error(studentError);
             
         }
         else{
             setStudentInfo(studentData);
-            console.log(studentData);
+            
         }
         setLoading(false);
         };
@@ -76,6 +76,7 @@ export default function ParentPortal(){
 
     return(<div className="parent-portal">
         <Header/>
+        { loading? <p>loading...</p> :<>
         <h1>{parentName}'s Students:</h1>
         <div className= "row">
             <div className = "mainSection">
@@ -119,13 +120,13 @@ export default function ParentPortal(){
                 </div>
             </div>
             <div className="sidebar">
-                 {lpClicked === true && <PlateUpdate/>}
+                 {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
                  {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
                  {qrClicked === true && <QRcode/>}
               
             </div>
         </div>
-        
+        </>}
     </div>
     );
 }
