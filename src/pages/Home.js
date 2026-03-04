@@ -9,6 +9,7 @@ export default function Home(){
   // Google AUTH ///
   const [parentError, setParentError] = useState("");
   const [staffError, setStaffError] = useState("");
+  const [newAccountError, setNewAccountError] = useState("");
   const handleParentLogin = async () => {
     setParentError("");
 
@@ -39,6 +40,22 @@ export default function Home(){
       setStaffError("Authentication failed. Please try again.");
     }
   };
+
+
+  const handleNewAccountLogin = async () => {
+    setNewAccountError("");
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/create-account`,
+      },
+    });
+
+    if (error) {
+      setNewAccountError("Authentication failed. Please try again.");
+    }
+  };
   /////////////////
     return (
     <div className="app">
@@ -46,6 +63,7 @@ export default function Home(){
 
       {parentError && <p >{parentError}</p>}
       {staffError && <p >{staffError}</p>}
+      {staffError && <p >{newAccountError}</p>}
 
       <div className="button-row">
         <button className="main-btn" onClick={handleParentLogin}>Parent/Guardian Login</button>
@@ -53,7 +71,7 @@ export default function Home(){
       </div>
 
       <div className="button-row">
-          <button className="main-btn" onClick={() => navigate("/create-account")}>
+          <button className="main-btn" onClick={handleNewAccountLogin}>
             Create New Account
           </button>
           <button className="main-btn" onClick={() => navigate("/volunteer-login")}>

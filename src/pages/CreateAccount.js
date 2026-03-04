@@ -1,10 +1,11 @@
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
-import { useState} from "react";
+import { useState, useEffect} from "react";
 
 function CreateAccount() {
   const navigate = useNavigate();
+  const [googleid, setGoogleid]=useState(null);
 
   const [parent, setParent] = useState({
     firstName: "",
@@ -40,6 +41,26 @@ function CreateAccount() {
     setStudents(updated);
   };
 
+  // getting google id
+  
+useEffect(() => {
+  const checkUser = async () => {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (!authData.user) {
+            navigate("/");
+        }
+        if(authError){
+            console.log(authError);
+            return;
+        }
+        setGoogleid(authData.user.id);
+  }
+  checkUser();
+    }, [navigate]);
+
+  
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,7 +73,7 @@ function CreateAccount() {
         plate_number: parent.plateNumber,
         plate_state: parent.plateState,
         email: parent.email,   
-        google_id: parent.id,     
+        google_id: googleid,     
       };
 
       const { data: parentData, error: parentError } = await supabase

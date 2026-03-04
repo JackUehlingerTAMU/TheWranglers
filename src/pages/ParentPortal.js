@@ -19,6 +19,7 @@ export default function ParentPortal(){
     const [parent_id, setParent_id]=useState(null);
     
     
+    
 
     // Login Protection:
     useEffect(() => {
@@ -32,6 +33,7 @@ export default function ParentPortal(){
             console.log(authError);
             return;
         }
+        
 
         // Get Parent Name
         const { data: parentData, error: parentError  } = await supabase
