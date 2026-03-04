@@ -17,6 +17,7 @@ export default function ParentPortal(){
     const [studentInfo, setStudentInfo] =useState(null);
     const [loading, setLoading]= useState(true);
     const [parent_id, setParent_id]=useState(null);
+    const [accountExpiration, setAccountExpiration] = useState(null);
     
     
     
@@ -38,7 +39,7 @@ export default function ParentPortal(){
         // Get Parent Name
         const { data: parentData, error: parentError  } = await supabase
             .from("parent")       // replace with your table name
-            .select("id,parent_first_name,parent_last_name")    // columns you want
+            .select("id,parent_first_name,parent_last_name,account_expiration")   // columns you want
             .eq("google_id", authData.user.id)
             .single();             // get a single record
 
@@ -49,6 +50,7 @@ export default function ParentPortal(){
         else{
             setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
             setParent_id(parentData.id);
+            setAccountExpiration(parentData.account_expiration);
         }
 
         // Get Parent-Student Connections
@@ -71,64 +73,74 @@ export default function ParentPortal(){
         checkUser();
     }, [navigate]);
 
-    
-    
+    return (
+        <div className="parent-portal">
+            <Header />
+            {loading ? (
+            <p>loading...</p>
+            ) : (
+            <>
+                <div className="parent-header-row">
+                <h1 className="parent-title">{parentName}'s Students:</h1>
 
-
-
-    return(<div className="parent-portal">
-        <Header/>
-        { loading? <p>loading...</p> :<>
-        <h1>{parentName}'s Students:</h1>
-        <div className= "row">
-            <div className = "mainSection">
-                <h2>My Students:</h2>
-                {/* Table of children */}
-                {loading? 
-                <p>loading...</p>:
-                studentInfo && studentInfo.length === 0 ? 
-                <p> No Students yet, please add them by clicking the add student button!</p> :
-                <table className="parent-table">
-                    <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Student Grade</th>
-                        <th>Pickup Status</th>
-                        <th>Approved Licence Plate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {studentInfo.map(student =>
-                    <tr key={student.student_id}>
-                        <td> {student.students.student_first_name + " " +student.students.student_middle_name + " " + student.students.student_last_name} </td>
-                        <td>{student.students.student_grade}</td>
-                        <td>{student.pickup_status? "Approved":"Pending Approval"}</td>
-                        <td>{student.parent.plate_state + " " + student.parent.plate_number}</td>
-                    </tr>
-                    )}
-                
-                    
-                    </tbody>
-                </table>
-                
-                }
-
-                {/* Update Buttons */}
-                <div className = "button-rows">
-                    <button className="main-btn" onClick={() => {setIslpClicked(!lpClicked); setNewStudentClicked(false); setQrClicked(false); } } >Update License Plate</button>
-                    <button className="main-btn" onClick={()=> {setNewStudentClicked(!newStudentClicked); setIslpClicked(false); setQrClicked(false);} }>Add a New Child</button>
-                    <button className="main-btn" onClick={()=>{setQrClicked(!qrClicked); setIslpClicked(false);setNewStudentClicked(false);}}>Get QR Code</button> 
-               
+                <div className="expire-box">
+                    <span className="expire-label">Account expires</span>
+                    <span className="expire-date">
+                    {accountExpiration ? new Date(accountExpiration).toLocaleDateString() : "—"}
+                    </span>
                 </div>
-            </div>
-            <div className="sidebar">
-                 {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
-                 {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
-                 {qrClicked === true && <QRcode/>}
-              
-            </div>
+                </div>
+
+                <div className="row">
+                <div className = "mainSection">
+                                <h2>My Students:</h2>
+                                {/* Table of children */}
+                                {loading? 
+                                <p>loading...</p>:
+                                studentInfo && studentInfo.length === 0 ? 
+                                <p> No Students yet, please add them by clicking the add student button!</p> :
+                                <table className="parent-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Student Grade</th>
+                                        <th>Pickup Status</th>
+                                        <th>Approved Licence Plate</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {studentInfo.map(student =>
+                                    <tr key={student.student_id}>
+                                        <td> {student.students.student_first_name + " " +student.students.student_middle_name + " " + student.students.student_last_name} </td>
+                                        <td>{student.students.student_grade}</td>
+                                        <td>{student.pickup_status? "Approved":"Pending Approval"}</td>
+                                        <td>{student.parent.plate_state + " " + student.parent.plate_number}</td>
+                                    </tr>
+                                    )}
+                                
+                                    
+                                    </tbody>
+                                </table>
+                                
+                                }
+
+                                {/* Update Buttons */}
+                                <div className = "button-rows">
+                                    <button className="main-btn" onClick={() => {setIslpClicked(!lpClicked); setNewStudentClicked(false); setQrClicked(false); } } >Update License Plate</button>
+                                    <button className="main-btn" onClick={()=> {setNewStudentClicked(!newStudentClicked); setIslpClicked(false); setQrClicked(false);} }>Add a New Child</button>
+                                    <button className="main-btn" onClick={()=>{setQrClicked(!qrClicked); setIslpClicked(false);setNewStudentClicked(false);}}>Get QR Code</button> 
+                            
+                                </div>
+                            </div>
+                            <div className="sidebar">
+                                {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
+                                {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
+                                {qrClicked === true && <QRcode/>}
+                            
+                            </div>
+                </div>
+            </>
+            )}
         </div>
-        </>}
-    </div>
-    );
+);
 }

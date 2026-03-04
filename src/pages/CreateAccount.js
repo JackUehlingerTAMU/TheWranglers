@@ -65,6 +65,14 @@ useEffect(() => {
     e.preventDefault();
 
     try {
+      const now = new Date();
+      const year = now.getFullYear();
+
+      // JS months are 0-based: Jan=0 ... Jun=5 ... Jul=6
+      const expiresYear = now.getMonth() <= 5 ? year : year + 1;
+
+      // "YYYY-06-30" works great for Postgres date columns
+      const accountExpiration = `${expiresYear}-06-30`;
 
       //Insert parent
       const parentPayload = {
@@ -72,8 +80,9 @@ useEffect(() => {
         parent_last_name: parent.lastName,
         plate_number: parent.plateNumber,
         plate_state: parent.plateState,
-        email: parent.email,   
-        google_id: googleid,     
+        email: parent.email,
+        google_id: googleid,
+        account_expiration: accountExpiration,
       };
 
       const { data: parentData, error: parentError } = await supabase

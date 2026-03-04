@@ -718,3 +718,44 @@ td{
   transform: scale(1.05);
   background-color: rgba(255,255,255,0.55);
 }
+
+.parent-header-row {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.parent-title {
+  margin: 20px 0 0 0;  /* pushes it down */
+  text-align: center;
+}
+
+.expire-box {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+
+  background-color: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+
+  padding: 10px 16px;
+  min-width: 190px;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.expire-label {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.expire-date {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--camel);
+}
