@@ -11,11 +11,19 @@ function StaffPortal() {
   const [editFormData, setEditFormData] = useState(null);
 
   const [students, setStudents] = useState([]);
+  
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
+  const [searchStudentName, setSearchStudentName] = useState("");
+  const [searchParentName, setSearchParentName] = useState("");
+  const [searchPlateNumber, setSearchPlateNumber] = useState("");
+  const [filterPlateState, setFilterPlateState] = useState("");
 
   useEffect(() => {
     fetchStudentData();
   }, []);
 
+  // get info from database
   const fetchStudentData = async () => {
     try {
       const { data, error } = await supabase
@@ -103,6 +111,7 @@ function StaffPortal() {
     }
   };
 
+  // edit data
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     
@@ -152,6 +161,7 @@ function StaffPortal() {
     setEditFormData({ ...editFormData, [name]: value });
   };
 
+  // delete
   const handleDelete = async (id) => {
     try {
       const { error } = await supabase
@@ -166,6 +176,49 @@ function StaffPortal() {
       console.error("Error deleting record:", error.message);
     }
   };
+
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // extract unique states for the dropdown filter
+  const uniqueStates = [...new Set(students.map(s => s.plate_state).filter(Boolean))].sort();
+
+  // copy of students sorted based on sortConfig and filtered based on search and filter criteria
+  const filteredAndSortedStudents = students
+    .filter((student) => {
+      const matchesStudent = student.name.toLowerCase().includes(searchStudentName.toLowerCase());
+      const matchesParent = student.parents.toLowerCase().includes(searchParentName.toLowerCase());
+      const matchesPlateNum = student.plate_number.toLowerCase().includes(searchPlateNumber.toLowerCase());
+      
+      const matchesState = filterPlateState === "" || student.plate_state === filterPlateState;
+
+      return matchesStudent && matchesParent && matchesPlateNum && matchesState;
+    })
+    .sort((a, b) => {
+      if (!sortConfig.key) return 0;
+
+      if (sortConfig.key === 'student_grade') {
+        const gradeOrder = { 'KG': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5 };
+        const weightA = gradeOrder[a.student_grade] !== undefined ? gradeOrder[a.student_grade] : 99;
+        const weightB = gradeOrder[b.student_grade] !== undefined ? gradeOrder[b.student_grade] : 99;
+
+        if (weightA < weightB) return sortConfig.direction === 'ascending' ? -1 : 1;
+        if (weightA > weightB) return sortConfig.direction === 'ascending' ? 1 : -1;
+        return 0;
+      }
+
+      const aValue = a[sortConfig.key]?.toString().toLowerCase() || '';
+      const bValue = b[sortConfig.key]?.toString().toLowerCase() || '';
+
+      if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
+      return 0;
+    });
 
   return (
     <div className="staff-portal">
@@ -190,20 +243,69 @@ function StaffPortal() {
         <button className="main-btn logout-btn">Logout</button>
       </div>
 
+      {/* search bars */}
+      <div style={{ display: "flex", gap: "15px", marginBottom: "20px", flexWrap: "wrap", padding: "0 20px" }}>
+        <input
+          type="text"
+          placeholder="Search Student..."
+          value={searchStudentName}
+          onChange={(e) => setSearchStudentName(e.target.value)}
+          style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", flex: 1, minWidth: "150px" }}
+        />
+        <input
+          type="text"
+          placeholder="Search Parent..."
+          value={searchParentName}
+          onChange={(e) => setSearchParentName(e.target.value)}
+          style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", flex: 1, minWidth: "150px" }}
+        />
+        <div style={{ display: "flex", gap: "5px", flex: 1, minWidth: "200px" }}>
+          <select
+            value={filterPlateState}
+            onChange={(e) => setFilterPlateState(e.target.value)}
+            style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", width: "80px" }}
+          >
+            <option value="">All States</option>
+            {uniqueStates.map(state => (
+              <option key={state} value={state}>{state}</option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="Search Plate #..."
+            value={searchPlateNumber}
+            onChange={(e) => setSearchPlateNumber(e.target.value)}
+            style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", flex: 1 }}
+          />
+        </div>
+      </div>
+
         <div className="child-table">
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>Grade</th>
-              <th>Parent(s)</th>
-              <th>Parent License Plate</th>
-              <th>Status</th>
+              {/* sort when clicked */}
+              <th onClick={() => handleSort('student_last_name')} style={{ cursor: "pointer", userSelect: "none" }}>
+                Student Name {sortConfig.key === 'student_last_name' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+              </th>
+              <th onClick={() => handleSort('student_grade')} style={{ cursor: "pointer", userSelect: "none" }}>
+                Grade {sortConfig.key === 'student_grade' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+              </th>
+              <th onClick={() => handleSort('parent_last_name')} style={{ cursor: "pointer", userSelect: "none" }}>
+                Parent(s) {sortConfig.key === 'parent_last_name' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+              </th>
+              <th onClick={() => handleSort('licensePlate')} style={{ cursor: "pointer", userSelect: "none" }}>
+                Parent License Plate {sortConfig.key === 'licensePlate' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+              </th>
+              <th onClick={() => handleSort('status')} style={{ cursor: "pointer", userSelect: "none" }}>
+                Status {sortConfig.key === 'status' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {students.map((student) => (
+            {/* display info */}
+            {filteredAndSortedStudents.map((student) => (
               <tr key={student.id}>
                 <td>{student.name}</td>
                 <td>{student.grade}</td>
@@ -230,12 +332,14 @@ function StaffPortal() {
         </table>
       </div>
 
+      {/* edit modal */}
       {isModalOpen && editFormData && (
         <div className="modal-overlay" style={{ overflowY: 'auto', paddingTop: '50px' }}>
           <div className="modal-content" style={{ maxWidth: '600px' }}>
             <h2>Edit Record</h2>
             
             <form onSubmit={handleSaveEdit}>
+              {/* student section */}
               <h3 style={{ borderBottom: '1px solid #000000', paddingBottom: '5px' }}>Student Info</h3>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <div className="form-group" style={{ flex: 1 }}>
@@ -266,7 +370,7 @@ function StaffPortal() {
                 </div>
               </div>
               
-              {/* Parent Section */}
+              {/* parent section */}
               <h3 style={{ borderBottom: '1px solid #000000', paddingBottom: '5px', marginTop: '20px' }}>Parent Info</h3>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <div className="form-group" style={{ flex: 1 }}>
@@ -290,8 +394,8 @@ function StaffPortal() {
                 </div>
               </div>
 
-              {/* Status Section */}
-              <h3 style={{ borderBottom: '1px solid #000000', paddingBottom: '5px', marginTop: '20px' }}>Pickup Status</h3>
+              {/* status section */}
+              <h3 style={{ borderBottom: '1px solid #000000', paddingBottom: '5px', marginTop: '20px' }}>Approval Status</h3>
               <div className="form-group">
                 <select id="status" name="status" value={editFormData.status} onChange={handleFormChange}>
                   <option value="Pending">Pending</option>
