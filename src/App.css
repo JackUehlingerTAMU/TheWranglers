@@ -486,7 +486,7 @@ td{
 .remove-station {
   background: transparent;
   border: none;
-  color: #ffb3b3;
+  color: #8b0000;   
   font-size: 1.2rem;
   cursor: pointer;
   transition: 0.2s ease;
@@ -497,16 +497,6 @@ td{
   transform: scale(1.2);
 }
 
-/* add the extra pastel classes too */
-.pink { background-color: #f6c1d1; }
-.peach { background-color: #f8d5c4; }
-.mint { background-color: #d6f0e0; }
-.teal { background-color: #c9e6e3; }
-.lavender { background-color: #e2d9f3; }
-.coral { background-color: #f7c6b9; }
-.sky { background-color: #d6e9f8; }
-.lime { background-color: #e6f4c7; }
-.rose { background-color: #f4c7cf; }
 
 /* ===== Create Account Page ===== */
 
@@ -677,3 +667,54 @@ td{
   margin-bottom: 10px;
 }
 
+/* ===== Pickup Station Page ===== */
+.pickup-station {
+  background-color: var(--maroon);
+  color: var(--white);
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dropdown section */
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.dropdown-container label {
+  font-weight: 600;
+}
+
+.dropdown {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background-color: rgba(255,255,255,0.15);
+  color: var(--white);
+  min-width: 220px;
+}
+
+.dropdown option {
+  color: black;
+}
+
+/* pickup button */
+.pickup-btn {
+  background-color: rgba(255,255,255,0.35);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 1rem;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.pickup-btn:hover {
+  transform: scale(1.05);
+  background-color: rgba(255,255,255,0.55);
+}
