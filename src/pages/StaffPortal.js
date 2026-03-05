@@ -240,7 +240,7 @@ function StaffPortal() {
           </button>
         </div>
 
-        <button className="main-btn logout-btn" onClick={() => navigate(-1)}>
+        <button className="main-btn logout-btn" onClick={() => navigate("/")}>
           Logout</button>
       </div>
 
