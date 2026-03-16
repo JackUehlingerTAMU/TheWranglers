@@ -19,9 +19,38 @@ function StaffPortal() {
   const [searchPlateNumber, setSearchPlateNumber] = useState("");
   const [filterPlateState, setFilterPlateState] = useState("");
 
+  // login check
   useEffect(() => {
-    fetchStudentData();
-  }, []);
+    const loginCheck = async () => {
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError || !authData.user) {
+            navigate("/");
+            return;
+      }
+      console.log(authData.user.id);
+      const {data: adminData, error: adminError} = await supabase
+        .from("admin")
+        .select("id")
+        .eq("google_id", authData.user.id)
+        .single();
+    
+
+    if(adminError || !adminData){
+      navigate("/");
+      console.log(adminData);
+      console.log(adminError);
+      return;
+    }
+    await fetchStudentData();
+    
+  };
+  loginCheck();
+  },[navigate]);
+
+  // useEffect(() => {
+  //   fetchStudentData();
+  // }, [navigate]);
+  
 
   // get info from database
   const fetchStudentData = async () => {
