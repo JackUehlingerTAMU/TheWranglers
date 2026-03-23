@@ -7,7 +7,7 @@ export default function QRcode({licensePlate}){
     console.log(qrGen);
     return(<>
         <h2>QR Code</h2>
-        <p>Here would be the qrcode when generated.</p>
+        
         <img src={qrGen} alt="QR Code"/>
         </>
     );
