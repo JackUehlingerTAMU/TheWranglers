@@ -110,24 +110,23 @@ function StaffPortal() {
   };
 
   const getVolunteerCode = () => {
-    const today = new Date().toDateString();
-    const stored = localStorage.getItem("volunteerCodeData");
+    const today = new Date();
 
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed.date === today) {
-        return parsed.code;
-      }
+    const dateString =
+      today.getFullYear().toString() +
+      String(today.getMonth() + 1).padStart(2, "0") +
+      String(today.getDate()).padStart(2, "0");
+
+    const SECRET = "wranglers_secret";
+
+    const combined = dateString + SECRET;
+
+    let hash = 0;
+    for (let i = 0; i < combined.length; i++) {
+      hash = (hash * 31 + combined.charCodeAt(i)) % 1000000;
     }
 
-    const newCode = Math.floor(100000 + Math.random() * 900000);
-
-    localStorage.setItem(
-      "volunteerCodeData",
-      JSON.stringify({ code: newCode, date: today })
-    );
-
-    return newCode;
+    return String(hash).padStart(6, "0");
   };
 
   const volunteerCode = getVolunteerCode();
