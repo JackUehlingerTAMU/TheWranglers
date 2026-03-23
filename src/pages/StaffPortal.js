@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../App.css";
+import { getVolunteerCode } from "../utils/volunteerCode";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
@@ -107,26 +108,6 @@ function StaffPortal() {
       console.error("Error fetching student data:", error.message);
       alert("Error loading table data. Check the developer console for details.");
     }
-  };
-
-  const getVolunteerCode = () => {
-    const today = new Date();
-
-    const dateString =
-      today.getFullYear().toString() +
-      String(today.getMonth() + 1).padStart(2, "0") +
-      String(today.getDate()).padStart(2, "0");
-
-    const SECRET = "wranglers_secret";
-
-    const combined = dateString + SECRET;
-
-    let hash = 0;
-    for (let i = 0; i < combined.length; i++) {
-      hash = (hash * 31 + combined.charCodeAt(i)) % 1000000;
-    }
-
-    return String(hash).padStart(6, "0");
   };
 
   const volunteerCode = getVolunteerCode();
