@@ -39,7 +39,7 @@ export default function ParentPortal(){
         // Get Parent Name
         const { data: parentData, error: parentError  } = await supabase
             .from("parent")       // replace with your table name
-            .select("id,parent_first_name,parent_last_name,account_expiration")   // columns you want
+            .select("id,parent_first_name,parent_last_name,plate_number,plate_state,account_expiration")   // columns you want
             .eq("google_id", authData.user.id)
             .single();             // get a single record
 
@@ -49,9 +49,12 @@ export default function ParentPortal(){
         }
         else{
             setParentName(parentData.parent_first_name+ " " + parentData.parent_last_name);
+            
             setParent_id(parentData.id);
+            
             setAccountExpiration(parentData.account_expiration);
         }
+        
 
         // Get Parent-Student Connections
         const {data: studentData, error: studentError} = await supabase
@@ -135,8 +138,8 @@ export default function ParentPortal(){
                             <div className="sidebar">
                                 {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
                                 {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
-                                {qrClicked === true && <QRcode/>}
-                            
+                               
+                                {qrClicked === true && <QRcode licensePlate={studentInfo[0].parent.plate_number + studentInfo[0].parent.plate_state }/>}
                             </div>
                 </div>
             </>

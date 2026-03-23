@@ -7,8 +7,6 @@ async function Batch(){
         .from("stations")
         .select("*");
 
-    
-
     // while queue not empty
     
     //  get X cars from queue
