@@ -139,8 +139,9 @@ td{
   flex-direction:row;
   width:100%;
   justify-content: center;
-  
-  
+}
+.parent-row h2{
+  margin: .5em;
 }
 .column{
   display: flex;
