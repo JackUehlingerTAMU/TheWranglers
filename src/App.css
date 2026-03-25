@@ -804,3 +804,24 @@ td{
     text-align: center;        
   }
 }
+
+/* Homepage grid */
+.button-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 10px;
+}
+.button-grid button {
+  
+  margin:1em;
+  
+  text-align: center;
+}
+@media (max-width: 800px) {
+  .button-grid {
+  display: grid;
+  grid-template-columns: auto;
+  padding: 10px;
+}
+
+}
