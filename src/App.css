@@ -22,6 +22,12 @@ body {
   align-items: center;
   justify-content: center;
 }
+/* ===== QR BOX ===== */
+.qr-box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* ===== Heading ===== */
 .title {
@@ -43,12 +49,12 @@ body {
   background-color: var(--camel);
   color: var(--granite);
   border: none;
-  padding: 20px 40px;
+  padding: 1em 1.5em;
   font-size: 1.3rem;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  min-width: 260px;
+  /* min-width: 260px; */
 }
 
 /* Hover → lighter maroon */
@@ -82,6 +88,17 @@ td{
  
 }
 
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  min-width: 300px; /* or whatever prevents squishing */
+  border-collapse: collapse;
+}
+
 /* === PARENT PICKUP PAGE === */
 .parent-portal{
   background-color: var(--light-maroon);
@@ -96,8 +113,9 @@ td{
 
 .mainSection{
    background-color: var(--white);
-   margin: 1em;
-   padding:1em;
+   margin-left: 1em;
+  margin-right:1em;
+   
    border-radius: 8px;
    color: black;
    flex:1;
@@ -105,8 +123,8 @@ td{
 .sidebar{
   flex:1;
   background-color: var(--camel);
-  margin: 1em;
-  padding: 1em;
+  margin-left: 1em;
+  margin-right:1em;
   border-radius: 8px;
   width: 30%
 }
@@ -115,6 +133,14 @@ td{
   flex-direction:row;
   width:100%;
   justify-content: center;
+}
+.parent-row{
+  display: flex;
+  flex-direction:row;
+  width:100%;
+  justify-content: center;
+  
+  
 }
 .column{
   display: flex;
@@ -130,14 +156,19 @@ td{
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .row {
+  .row, .parent-row {
     flex-direction: column;   
-    align-items: center;     
+    align-items: center;
+    padding-bottom: 1em;     
   }
 
   .mainSection,
   .sidebar {
     width: 100%;
+    margin-left:0;
+    margin-right:0;
+    padding-bottom: 1em;  
+    margin-bottom: 1em;  
   }
   .button-rows{
     display: flex;
@@ -146,22 +177,23 @@ td{
   }
 }
 
-/* ==== LOGOUT Button ==== */
+/* ==== Header ==== */
 .bar {
   display: flex;
   flex-direction: row; 
   justify-content: space-between; 
   align-items: center; 
-  padding: 10px 20px;
   background-color: var(--maroon);
   color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   width: 100%;
   top:0px;
   position:sticky;
+  z-index: 30;
 }
 .bar-item{
   margin: 20px;
+  
 }
 
 
@@ -758,4 +790,16 @@ td{
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--camel);
+}
+
+
+
+@media (max-width: 800px) {
+  .expire-box {
+    position: static;          
+    margin: 10px auto 0 auto;  /* top 10px, left/right auto to center */
+    width: 100%;               
+    max-width: 300px;          
+    text-align: center;        
+  }
 }

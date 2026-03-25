@@ -8,7 +8,7 @@ export default function Header(){
     };
 
     return(
-        <div className="bar">
+        <div className="bar ">
             <h1 className="bar-item">Pebble Creek Elementary</h1>
             <button className="main-btn bar-item" onClick={handleLogout}>Logout</button>
         </div>
