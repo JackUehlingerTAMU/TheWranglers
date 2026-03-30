@@ -1,18 +1,109 @@
 /* ===== Color Palette ===== */
 :root {
-  --maroon: #3A1122;       /* Midnight Violet */
-  --light-maroon: #5A1935; /* Crimson Violet */
+  --maroon: #3A1122;
+  --light-maroon: #5A1935;
   --white: #FFFFFF;
   --granite: #373737;
   --camel: #BF965C;
 }
 
-/* ===== Page Styling ===== */
+/* ===== Global ===== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
+.app,
+.parent-portal,
+.staff-portal,
+.kids-pickup,
+.create-account,
+.pickup-station,
+.volunteer-login {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ===== Shared Button Base ===== */
+.main-btn,
+.back-btn,
+.add-student,
+.submit-btn {
+  background-color: var(--camel);
+  color: var(--granite);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.main-btn:hover,
+.back-btn:hover,
+.add-student:hover,
+.submit-btn:hover {
+  background-color: var(--light-maroon);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* ===== Shared Glass Card Style ===== */
+.mini-form-container,
+.form-container,
+.login-card {
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ===== Shared Form Controls ===== */
+.form-column input,
+.form-column select,
+.login-card input,
+.dropdown,
+.station-select {
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  box-sizing: border-box;
+}
+
+.form-column input,
+.form-column select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.dropdown,
+.station-select {
+  padding: 10px;
+  font-size: 1rem;
+  min-width: 220px;
+}
+
+.form-column input::placeholder,
+.login-card input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.select_text option,
+.dropdown option,
+.station-select option {
+  color: black;
+}
+
+/* ===== Homepage ===== */
 .app {
   background-color: var(--maroon);
   color: var(--white);
@@ -22,70 +113,50 @@ body {
   align-items: center;
   justify-content: center;
 }
-/* ===== QR BOX ===== */
-.qr-box{
+
+.qr-box {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ===== Heading ===== */
 .title {
-  font-size: 3.5rem;   /* Bigger heading */
+  font-size: 3.5rem;
   margin-bottom: 60px;
   text-align: center;
 }
 
-/* ===== Buttons Layout ===== */
-.button-row {
+.button-row,
+.button-rows {
   display: flex;
   gap: 40px;
   margin-bottom: 40px;
 }
 
-
-/* ===== Button Style ===== */
 .main-btn {
-  background-color: var(--camel);
-  color: var(--granite);
-  border: none;
   padding: 1em 1.5em;
   font-size: 1.3rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  /* min-width: 260px; */
 }
 
-/* Hover → lighter maroon */
-.main-btn:hover {
-  background-color: var(--light-maroon);
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
-/* Tables */
-table{
+/* ===== Tables ===== */
+table {
   border: 1px solid black;
   border-collapse: collapse;
   padding: 3rem;
   margin: 1rem;
-  color:black;
-  
+  color: black;
 }
-th{
+
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 1rem;
+}
+
+th {
   background-color: var(--maroon);
-  color:white;
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 1rem;
- 
-}
-td{
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 1rem;
- 
+  color: var(--white);
 }
 
 .table-container {
@@ -95,125 +166,87 @@ td{
 
 .table-container table {
   width: 100%;
-  min-width: 300px; /* or whatever prevents squishing */
+  min-width: 300px;
   border-collapse: collapse;
 }
 
-/* === PARENT PICKUP PAGE === */
-.parent-portal{
+/* ===== Parent Portal ===== */
+.parent-portal {
   background-color: var(--light-maroon);
   color: var(--white);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* start from top */
+  justify-content: flex-start;
   align-items: center;
-
 }
 
-.mainSection{
-   background-color: var(--white);
-   margin-left: 1em;
-  margin-right:1em;
-   
-   border-radius: 8px;
-   color: black;
-   flex:1;
+.mainSection {
+  background-color: var(--white);
+  margin-left: 1em;
+  margin-right: 1em;
+  border-radius: 8px;
+  color: black;
+  flex: 1;
 }
-.sidebar{
-  flex:1;
+
+.sidebar {
+  flex: 1;
   background-color: var(--camel);
   margin-left: 1em;
-  margin-right:1em;
+  margin-right: 1em;
   border-radius: 8px;
-  width: 30%
+  width: 30%;
 }
-.row{
+
+.row,
+.parent-row {
   display: flex;
-  flex-direction:row;
-  width:100%;
+  flex-direction: row;
+  width: 100%;
   justify-content: center;
 }
-.parent-row{
+
+.parent-row h2 {
+  margin: 0.5em;
+}
+
+.column {
   display: flex;
-  flex-direction:row;
-  width:100%;
-  justify-content: center;
-}
-.parent-row h2{
-  margin: .5em;
-}
-.column{
-  display: flex;
-  flex-direction:column;
-  width:100%;
+  flex-direction: column;
+  width: 100%;
 }
 
-.button-rows {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 40px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .row, .parent-row {
-    flex-direction: column;   
-    align-items: center;
-    padding-bottom: 1em;     
-  }
-
-  .mainSection,
-  .sidebar {
-    width: 100%;
-    margin-left:0;
-    margin-right:0;
-    padding-bottom: 1em;  
-    margin-bottom: 1em;  
-  }
-  .button-rows{
-    display: flex;
-    flex-direction: column;
-
-  }
-}
-
-/* ==== Header ==== */
+/* ===== Header ===== */
 .bar {
   display: flex;
-  flex-direction: row; 
-  justify-content: space-between; 
-  align-items: center; 
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--maroon);
-  color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: var(--white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
-  top:0px;
-  position:sticky;
+  top: 0;
+  position: sticky;
   z-index: 30;
 }
-.bar-item{
+
+.bar-item {
   margin: 20px;
-  
 }
 
-
-
-/* ==== New Child Section ==== */
+/* ===== New Child Section ===== */
 .mini-form-container {
-  background-color: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  border-radius: 14px;
   padding: 40px;
   display: flex;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-.select_text option{
-  color: black;
-}
+/* ===== Student Blocks ===== */
 .student-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   margin-bottom: 30px;
 }
 
@@ -222,10 +255,17 @@ td{
   font-size: 1.1rem;
   color: var(--camel);
 }
+
+.student-block input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .student-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .remove-student {
@@ -241,34 +281,14 @@ td{
   color: #ff6666;
   transform: scale(1.2);
 }
-.student-block {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
 
-.student-block input {
-  width: 100%;
-  box-sizing: border-box;
-}
-/* ===== Staff Portal Layout ===== */
-
+/* ===== Staff Portal ===== */
 .staff-portal {
   background-color: var(--maroon);
   color: var(--white);
-  min-height: 100vh;
   padding: 40px;
   display: flex;
   flex-direction: column;
-}
-.form-column select {
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 6px;
-  background-color: rgba(255,255,255,0.15);
-  color: var(--white);
-  font-size: 1rem;
 }
 
 .portal-title {
@@ -293,7 +313,6 @@ td{
 }
 
 /* ===== Child Info Table ===== */
-
 .child-table {
   flex: 1;
   background-color: var(--white);
@@ -310,7 +329,8 @@ td{
   border-collapse: collapse;
 }
 
-.child-table th, .child-table td {
+.child-table th,
+.child-table td {
   padding: 10px;
   text-align: left;
   border: 1px solid var(--granite);
@@ -324,29 +344,16 @@ td{
 }
 
 /* ===== Kids Pickup Page ===== */
-
 .kids-pickup {
   background-color: var(--maroon);
   color: var(--white);
-  min-height: 100vh;
   padding: 40px;
 }
 
 .back-btn {
-  background-color: var(--camel);
-  color: var(--granite);
-  border: none;
   padding: 10px 20px;
   margin-bottom: 30px;
-  border-radius: 6px;
-  cursor: pointer;
   align-self: flex-start;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.back-btn:hover {
-  background-color: var(--light-maroon);
-  color: var(--white);
-  transform: translateY(-2px);
 }
 
 .kids-layout {
@@ -366,16 +373,14 @@ td{
   border-radius: 25px;
   padding: 20px;
   color: var(--granite);
-
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-
   overflow: hidden;
 }
 
-/* Module Colors (same pastels) */
+/* Module Colors */
 .red { background-color: #e6b3b3; }
 .orange { background-color: #f5d1a8; }
 .yellow { background-color: #f7e7a9; }
@@ -399,7 +404,6 @@ td{
   padding: 20px;
   border-radius: 12px;
   width: 340px;
-
   display: flex;
   flex-direction: column;
 }
@@ -408,12 +412,10 @@ td{
   margin-top: 0;
 }
 
-/* Card Inner Layout */
 .card-content {
   width: 100%;
 }
 
-/* Tables */
 .module-table {
   width: 90%;
   margin: 10px auto 0;
@@ -422,7 +424,7 @@ td{
 .module-table td {
   border: 1px solid #888;
   padding: 6px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .row-number {
@@ -435,7 +437,6 @@ td{
   height: 28px;
 }
 
-/* Up Next Table */
 .up-next-table {
   width: 90%;
   margin: 15px auto 0;
@@ -454,6 +455,7 @@ td{
   color: var(--granite);
 }
 
+/* ===== Station Controls ===== */
 .station-controls {
   display: flex;
   flex-direction: column;
@@ -482,20 +484,7 @@ td{
   width: 18px;
   height: 18px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.35);
-}
-
-.station-select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background-color: rgba(255,255,255,0.15);
-  color: var(--white);
-  min-width: 220px;
-}
-
-.station-select option {
-  color: black;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .station-add-btn {
@@ -519,7 +508,7 @@ td{
 .remove-station {
   background: transparent;
   border: none;
-  color: #8b0000;   
+  color: #8b0000;
   font-size: 1.2rem;
   cursor: pointer;
   transition: 0.2s ease;
@@ -530,86 +519,44 @@ td{
   transform: scale(1.2);
 }
 
-
 /* ===== Create Account Page ===== */
-
 .create-account {
-  min-height: 100vh;
   width: 100%;
-  background: linear-gradient(
-    to bottom,
-    var(--maroon),
-    var(--light-maroon)
-  );
+  background: linear-gradient(to bottom, var(--maroon), var(--light-maroon));
   color: var(--white);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
-  box-sizing: border-box;
 }
 
-/* Title */
 .create-account h1 {
   margin-bottom: 30px;
 }
 
-/* ===== Form Container ===== */
-
 .form-container {
-  background-color: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  border-radius: 14px;
   padding: 40px;
   display: flex;
   justify-content: center;
   gap: 100px;
   max-width: 1100px;
   width: 100%;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-/* Columns */
 .form-column {
   display: flex;
   flex-direction: column;
   width: 340px;
+  min-width: 0;
 }
 
 .form-column h2 {
   margin-bottom: 15px;
 }
 
-/* Labels */
 .form-column label {
   margin-top: 14px;
   font-size: 1rem;
-}
-
-/* Inputs */
-.form-column input {
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 6px;
-  background-color: rgba(255,255,255,0.15);
-  color: var(--white);
-  font-size: 1rem;
-}
-
-.form-column input::placeholder {
-  color: rgba(255,255,255,0.7);
-}
-
-/* Buttons */
-.add-student,
-.submit-btn {
-  background-color: var(--camel);
-  color: var(--granite);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s ease;
 }
 
 .add-student {
@@ -624,29 +571,19 @@ td{
   font-size: 1.1rem;
 }
 
-.add-student:hover,
-.submit-btn:hover {
-  background-color: var(--light-maroon);
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
+/* ===== Volunteer Code Box ===== */
 .volunteer-code-box {
   position: absolute;
   top: 20px;
   right: 20px;
-
   background-color: var(--camel);
   color: var(--granite);
-
   padding: 10px 18px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.95rem;
-
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   border: 2px solid var(--light-maroon);
-
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
@@ -656,43 +593,20 @@ td{
   transform: translateY(-2px);
 }
 
+/* ===== Volunteer Login ===== */
 .volunteer-login {
-  min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    var(--maroon),
-    var(--light-maroon)
-  );
+  background: linear-gradient(to bottom, var(--maroon), var(--light-maroon));
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
   padding: 40px;
-  border-radius: 14px;
   text-align: center;
   color: var(--white);
   width: 320px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-}
-
-.login-card input {
-  width: 100%;
-  padding: 12px;
-  margin: 15px 0;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.15);
-  color: var(--white);
-  text-align: center;
-  font-size: 1.2rem;
-}
-
-.login-card input::placeholder {
-  color: rgba(255,255,255,0.6);
 }
 
 .error-text {
@@ -704,13 +618,11 @@ td{
 .pickup-station {
   background-color: var(--maroon);
   color: var(--white);
-  min-height: 100vh;
   padding: 40px;
   display: flex;
   flex-direction: column;
 }
 
-/* Dropdown section */
 .dropdown-container {
   display: flex;
   align-items: center;
@@ -723,23 +635,9 @@ td{
   font-weight: 600;
 }
 
-.dropdown {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background-color: rgba(255,255,255,0.15);
-  color: var(--white);
-  min-width: 220px;
-}
-
-.dropdown option {
-  color: black;
-}
-
-/* pickup button */
 .pickup-btn {
-  background-color: rgba(255,255,255,0.35);
-  border: 1px solid rgba(0,0,0,0.15);
+  background-color: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   cursor: pointer;
   padding: 6px 10px;
@@ -749,7 +647,7 @@ td{
 
 .pickup-btn:hover {
   transform: scale(1.05);
-  background-color: rgba(255,255,255,0.55);
+  background-color: rgba(255, 255, 255, 0.55);
 }
 
 .parent-header-row {
@@ -760,7 +658,7 @@ td{
 }
 
 .parent-title {
-  margin: 20px 0 0 0;  /* pushes it down */
+  margin: 20px 0 0 0;
   text-align: center;
 }
 
@@ -768,16 +666,13 @@ td{
   position: absolute;
   right: 20px;
   top: 10px;
-
-  background-color: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.25);
+  background-color: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(6px);
   border-radius: 12px;
-
   padding: 10px 16px;
   min-width: 190px;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 .expire-label {
@@ -793,35 +688,189 @@ td{
   color: var(--camel);
 }
 
-
-
-@media (max-width: 800px) {
-  .expire-box {
-    position: static;          
-    margin: 10px auto 0 auto;  /* top 10px, left/right auto to center */
-    width: 100%;               
-    max-width: 300px;          
-    text-align: center;        
-  }
-}
-
-/* Homepage grid */
+/* ===== Homepage Grid ===== */
 .button-grid {
   display: grid;
   grid-template-columns: auto auto;
   padding: 10px;
 }
+
 .button-grid button {
-  
-  margin:1em;
-  
+  margin: 1em;
   text-align: center;
 }
+
+/* ===== Responsive ===== */
 @media (max-width: 800px) {
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+  }
+
+  .button-row,
+  .button-rows,
+  .left-buttons,
+  .portal-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .row,
+  .parent-row {
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1em;
+  }
+
+  .mainSection,
+  .sidebar {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+  }
+
   .button-grid {
-  display: grid;
-  grid-template-columns: auto;
-  padding: 10px;
+    grid-template-columns: auto;
+  }
+
+  .form-container {
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+  }
+
+  .form-column {
+    width: 100%;
+  }
+
+  .add-student,
+  .submit-btn,
+  .back-btn,
+  .main-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .student-header {
+    flex-wrap: wrap;
+  }
+
+  .kids-layout {
+    flex-direction: column;
+  }
+
+  .up-next {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .module-card {
+    height: auto;
+    min-height: 220px;
+  }
+
+  .volunteer-code-box {
+    position: static;
+    margin: 0 auto 20px auto;
+    width: fit-content;
+    text-align: center;
+  }
+
+  .expire-box {
+    position: static;
+    margin: 10px auto 0 auto;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  .staff-portal,
+  .kids-pickup,
+  .pickup-station,
+  .create-account {
+    padding: 20px;
+  }
+
+  .child-table {
+    overflow-x: auto;
+  }
+
+  .child-table th,
+  .child-table td {
+    font-size: 1rem;
+    padding: 8px;
+  }
+
+  .dropdown,
+  .station-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dropdown-container,
+  .station-controls-left,
+  .station-picker {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 24px;
+  }
 }
 
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .portal-title,
+  .create-account h1,
+  .parent-title {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .form-container,
+  .mini-form-container,
+  .login-card {
+    padding: 16px;
+  }
+
+  .module-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .up-next,
+  .child-table {
+    padding: 14px;
+  }
+
+  .main-btn,
+  .back-btn,
+  .add-student,
+  .submit-btn,
+  .pickup-btn {
+    font-size: 1rem;
+  }
+
+  .form-column label,
+  .form-column input,
+  .form-column select,
+  .login-card input,
+  .dropdown,
+  .station-select {
+    font-size: 16px;
+  }
 }
