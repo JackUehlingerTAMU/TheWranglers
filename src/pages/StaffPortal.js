@@ -293,7 +293,7 @@ function StaffPortal() {
           <select
             value={filterPlateState}
             onChange={(e) => setFilterPlateState(e.target.value)}
-            style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", width: "80px" }}
+            style={{ padding: "8px", borderRadius: "5px", border: "1px solid #ccc", width: "85px" }}
           >
             <option value="">All States</option>
             {uniqueStates.map(state => (
