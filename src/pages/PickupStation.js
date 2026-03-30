@@ -45,13 +45,13 @@ export default function PickupStation() {
       setSelectedStation((prev) => prev ?? list[0]);
 
       // ensure kidsData has entries for each station color
-      setKidsData((prev) => {
-        const copy = { ...prev };
-        for (const s of list) {
-          if (!copy[s.color]) copy[s.color] = defaultKidsForColor(s.color);
-        }
-        return copy;
-      });
+      // setKidsData((prev) => {
+      //   const copy = { ...prev };
+      //   for (const s of list) {
+      //     // if (!copy[s.color]) copy[s.color] = defaultKidsForColor(s.color);
+      //   }
+      //   return copy;
+      // });
     }
 
     setLoading(false);
@@ -62,8 +62,46 @@ export default function PickupStation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+///////////////////////////// TESTING STUDENT PICKUP SERVER CONNECTION ///////////
+
+
+
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://192.168.75.128:3000/data');
+        const result = await response.json();
+        setData(result);
+        // console.log(result);
+
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+
+    // Refresh
+    const interval = setInterval(fetchData, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
   const selectedColor = selectedStation?.color || "";
-  const selectedKids = kidsData[selectedColor] || [];
+  // const selectedKids = kidsData[selectedColor] || [];
+  const selectedKids =  [data.name] || [];
 
   const handlePickup = (index) => {
     if (!selectedColor) return;
@@ -82,6 +120,16 @@ export default function PickupStation() {
       <button className="back-btn" onClick={() => navigate(-1)}>
         Back
       </button>
+
+      {/* //////////////////////////////// */}
+     
+      <div>
+        
+        <p>Name: {data.name}</p>
+        <p>Parents Name: {data.parent}</p>
+      </div>
+  
+      {/* //////////////////////////////// */}
 
       {/* Dropdown */}
       <div className="dropdown-container">
