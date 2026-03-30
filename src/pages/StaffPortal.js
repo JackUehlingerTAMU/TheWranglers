@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../App.css";
+import { getVolunteerCode } from "../utils/volunteerCode";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
@@ -107,27 +108,6 @@ function StaffPortal() {
       console.error("Error fetching student data:", error.message);
       alert("Error loading table data. Check the developer console for details.");
     }
-  };
-
-  const getVolunteerCode = () => {
-    const today = new Date().toDateString();
-    const stored = localStorage.getItem("volunteerCodeData");
-
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed.date === today) {
-        return parsed.code;
-      }
-    }
-
-    const newCode = Math.floor(100000 + Math.random() * 900000);
-
-    localStorage.setItem(
-      "volunteerCodeData",
-      JSON.stringify({ code: newCode, date: today })
-    );
-
-    return newCode;
   };
 
   const volunteerCode = getVolunteerCode();

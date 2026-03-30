@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getVolunteerCode } from "../utils/volunteerCode";
 import "../App.css";
 
 function VolunteerLogin() {
@@ -10,16 +11,10 @@ function VolunteerLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const stored = localStorage.getItem("volunteerCodeData");
-    if (!stored) {
-      setError("Code not found. Please contact staff.");
-      return;
-    }
-
-    const { code: validCode } = JSON.parse(stored);
+    const validCode = getVolunteerCode(); // ← use your new function
 
     if (code === String(validCode)) {
-      navigate("/pickup-station"); // 
+      navigate("/pickup-station");
     } else {
       setError("Invalid code. Please try again.");
       setCode("");

@@ -71,16 +71,16 @@ export default function Home(){
       {staffError && <p>{staffError}</p>}
       {newAccountError && <p>{newAccountError}</p>}
 
-      <div className="button-row">
+      <div className="button-grid">
         <button className="main-btn" onClick={handleParentLogin}>
           Parent/Guardian Login
         </button>
         <button className="main-btn" onClick={handleStaffLogin}>
           Staff Login
         </button>
-      </div>
+      {/* </div>
 
-      <div className="button-row">
+      <div className="button-row"> */}
         <button className="main-btn" onClick={handleNewAccountLogin}>
           Create New Account
         </button>

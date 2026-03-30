@@ -84,31 +84,48 @@ export default function ParentPortal(){
             ) : (
             <>
                 <div className="parent-header-row">
+                    
+                
                 <h1 className="parent-title">{parentName}'s Students:</h1>
-
-                <div className="expire-box">
-                    <span className="expire-label">Account expires</span>
-                    <span className="expire-date">
-                    {accountExpiration ? new Date(accountExpiration).toLocaleDateString() : "—"}
-                    </span>
+                 <div className="expire-box">
+                                <span className="expire-label">Account expires</span>
+                                <span className="expire-date">
+                                {accountExpiration ? new Date(accountExpiration).toLocaleDateString() : "—"}
+                                </span>
                 </div>
                 </div>
+                 {/* Update Buttons */}
+                                <div className = "button-rows">
+                                    <button className="main-btn" onClick={() => {setIslpClicked(!lpClicked); setNewStudentClicked(false); setQrClicked(false); } } >Update License Plate</button>
+                                    <button className="main-btn" onClick={()=> {setNewStudentClicked(!newStudentClicked); setIslpClicked(false); setQrClicked(false);} }>Add a New Child</button>
+                                    <button className="main-btn" onClick={()=>{setQrClicked(!qrClicked); setIslpClicked(false);setNewStudentClicked(false);}}>Get QR Code</button> 
+                                </div>
+                
+                
 
-                <div className="row">
+                <div className="parent-row">
+                    <div className="sidebar">
+                                {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
+                                {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
+                               
+                                {qrClicked === true && <QRcode licensePlate={studentInfo[0].parent.plate_number + studentInfo[0].parent.plate_state }/>}
+                            </div>
                 <div className = "mainSection">
+                    
                                 <h2>My Students:</h2>
                                 {/* Table of children */}
                                 {loading? 
                                 <p>loading...</p>:
                                 studentInfo && studentInfo.length === 0 ? 
                                 <p> No Students yet, please add them by clicking the add student button!</p> :
+                                <div className="table-container">
                                 <table className="parent-table">
                                     <thead>
                                     <tr>
                                         <th>Student Name</th>
                                         <th>Student Grade</th>
                                         <th>Pickup Status</th>
-                                        <th>Approved Licence Plate</th>
+                                        <th>Approved Plate</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -124,23 +141,13 @@ export default function ParentPortal(){
                                     
                                     </tbody>
                                 </table>
+                                </div>
                                 
                                 }
 
-                                {/* Update Buttons */}
-                                <div className = "button-rows">
-                                    <button className="main-btn" onClick={() => {setIslpClicked(!lpClicked); setNewStudentClicked(false); setQrClicked(false); } } >Update License Plate</button>
-                                    <button className="main-btn" onClick={()=> {setNewStudentClicked(!newStudentClicked); setIslpClicked(false); setQrClicked(false);} }>Add a New Child</button>
-                                    <button className="main-btn" onClick={()=>{setQrClicked(!qrClicked); setIslpClicked(false);setNewStudentClicked(false);}}>Get QR Code</button> 
-                            
-                                </div>
-                            </div>
-                            <div className="sidebar">
-                                {lpClicked === true && <PlateUpdate parent_id={parent_id}/>}
-                                {newStudentClicked === true && <NewChild parent_id={parent_id}/>}
                                
-                                {qrClicked === true && <QRcode licensePlate={studentInfo[0].parent.plate_number + studentInfo[0].parent.plate_state }/>}
                             </div>
+                            
                 </div>
             </>
             )}
