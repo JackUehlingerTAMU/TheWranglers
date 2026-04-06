@@ -72,10 +72,12 @@ export default function PickupStation() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://192.168.75.128:3000/data');
+        // const response = await fetch('http://192.168.60.128:3000/data');
+        const response = await fetch('http://10.247.252.228:25565/data');
         const result = await response.json();
         setData(result);
-        // console.log(result);
+        
+        console.log(result);
 
         
       } catch (error) {
@@ -93,15 +95,32 @@ export default function PickupStation() {
 
 ///////////////////////////////////////////////////////////////////////////
 
+const sendTestData = async () => {
+  try {
+    const response = await fetch('http://10.247.252.228:25565/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'John Doe',
+        parent: 'Jane Doe',
+      }),
+    });
 
-
+    const text = await response.text();
+    console.log(text);
+  } catch (error) {
+    console.error('Error sending data:', error);
+  }
+};
 
 
 
 
   const selectedColor = selectedStation?.color || "";
-  // const selectedKids = kidsData[selectedColor] || [];
-  const selectedKids =  [data.name] || [];
+  const selectedKids = kidsData[selectedColor] || [];
+  // const selectedKids =  [data.name] || [];
 
   const handlePickup = (index) => {
     if (!selectedColor) return;
@@ -120,83 +139,24 @@ export default function PickupStation() {
       <button className="back-btn" onClick={() => navigate(-1)}>
         Back
       </button>
+      <button onClick={sendTestData}>Send Test Data</button>
 
       {/* //////////////////////////////// */}
-     
+      
       <div>
-        
-        <p>Name: {data.name}</p>
-        <p>Parents Name: {data.parent}</p>
-      </div>
-  
-      {/* //////////////////////////////// */}
+      <h2>All Students</h2>
+      {data.length === 0 ? (
+        <p>No students yet</p>
+      ) : (
+        data.map((student, index) => (
+          <div key={index} style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
+            <p>Name: {student.name}</p>
+            <p>Parents Name: {student.parent}</p>
+          </div>
+        ))
+      )}
+    </div>
 
-      {/* Dropdown */}
-      <div className="dropdown-container">
-        <label htmlFor="color-select">Select Color:</label>
-
-        <select
-          id="color-select"
-          className="dropdown"
-          value={selectedStation?.id ?? ""}
-          onChange={(e) => {
-            const id = Number(e.target.value);
-            const found = stations.find((s) => s.id === id);
-            setSelectedStation(found || null);
-          }}
-          disabled={loading || stations.length === 0}
-        >
-          {loading && <option value="">Loading...</option>}
-          {!loading && stations.length === 0 && <option value="">No stations found</option>}
-          {!loading &&
-            stations.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.color}
-              </option>
-            ))}
-        </select>
-      </div>
-
-      {errorMsg && <p className="station-error">{errorMsg}</p>}
-
-      {/* Card */}
-      <div className="kids-layout">
-        <div className="modules-grid">
-          {selectedColor ? (
-            <div className={`module-card ${selectedColor.toLowerCase()}`}>
-              <div className="card-content">
-                <h2>{selectedColor}</h2>
-
-                <table className="module-table">
-                  <tbody>
-                    {selectedKids.length === 0 ? (
-                      <tr>
-                        <td colSpan="3" style={{ textAlign: "center" }}>
-                          No kids currently
-                        </td>
-                      </tr>
-                    ) : (
-                      selectedKids.map((kid, index) => (
-                        <tr key={index}>
-                          <td className="row-number">{index + 1}</td>
-                          <td className="kid-cell">{kid}</td>
-                          <td style={{ width: 60, textAlign: "center" }}>
-                            <button className="pickup-btn" onClick={() => handlePickup(index)}>
-                              ✅
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            <p style={{ color: "white" }}>Select a station to view kids.</p>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
