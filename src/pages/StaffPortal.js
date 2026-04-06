@@ -170,19 +170,42 @@ function StaffPortal() {
     setEditFormData({ ...editFormData, [name]: value });
   };
 
-  // delete
   const handleDelete = async (id) => {
+    const recordToDelete = students.find((student) => student.id === id);
+
+    if (!recordToDelete) {
+      alert("Record not found.");
+      return;
+    }
+
+    // extract student_id
+    const studentId = recordToDelete.student_id;
+
     try {
-      const { error } = await supabase
+      // delete from parent_student table
+      const { data: joinData, error: joinError } = await supabase
         .from('parent_student')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .select();
 
-      if (error) throw error;
-      setStudents(students.filter((student) => student.id !== id));
+      if (joinError) throw joinError;
+
+      // delete from students table
+      const { data: studentData, error: studentError } = await supabase
+        .from('students')
+        .delete()
+        .eq('id', studentId)
+        .select();
+
       
+      if (studentError) throw studentError;
+
+      setStudents(students.filter((student) => student.id !== id));
+            
     } catch (error) {
       console.error("Error deleting record:", error.message);
+      alert("Failed to delete record: " + error.message);
     }
   };
 
