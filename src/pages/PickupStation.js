@@ -67,7 +67,7 @@ export default function PickupStation() {
 
 
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +76,8 @@ export default function PickupStation() {
         const response = await fetch('http://10.247.252.228:25565/data');
         const result = await response.json();
         setData(result);
+        // setData(result);
+        
         
         console.log(result);
 
@@ -142,20 +144,16 @@ const sendTestData = async () => {
       <button onClick={sendTestData}>Send Test Data</button>
 
       {/* //////////////////////////////// */}
-      
-      <div>
-      <h2>All Students</h2>
-      {data.length === 0 ? (
-        <p>No students yet</p>
-      ) : (
-        data.map((student, index) => (
-          <div key={index} style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
-            <p>Name: {student.name}</p>
-            <p>Parents Name: {student.parent}</p>
-          </div>
-        ))
-      )}
+    {data.length === 0 ? (
+  <p>No students yet</p>
+) : (
+  data.map((student, index) => (
+    <div key={index} style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
+      <p>Name: {student.name}</p>
+      <p>Parent: {student.parent}</p>
     </div>
+  ))
+)}
 
     </div>
   );
