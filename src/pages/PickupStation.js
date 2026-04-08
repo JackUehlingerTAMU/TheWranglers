@@ -73,7 +73,7 @@ export default function PickupStation() {
     const fetchData = async () => {
       try {
         // const response = await fetch('http://192.168.60.128:25565/data');
-        const response = await fetch('http://10.245.249.15:3000/data');
+        const response = await fetch('https://wranglers-capstone.onrender.com/data');
         const result = await response.json();
         setData(result);
         // setData(result);
@@ -134,7 +134,7 @@ export default function PickupStation() {
 const sendTestData = async () => {
   try {
     // const response = await fetch('http://192.168.60.128:3000/data', {
-    const response = await fetch('http://10.245.249.15:3000/data', {
+    const response = await fetch('https://wranglers-capstone.onrender.com/data', {
     // const response = await fetch('http://10.247.252.228:25565/data', {
       method: 'POST',
       headers: {
