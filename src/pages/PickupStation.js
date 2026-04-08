@@ -72,8 +72,8 @@ export default function PickupStation() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await fetch('http://192.168.60.128:3000/data');
-        const response = await fetch('http://10.247.252.228:25565/data');
+        // const response = await fetch('http://192.168.60.128:25565/data');
+        const response = await fetch('http://10.245.249.15:25565/data');
         const result = await response.json();
         setData(result);
         // setData(result);
@@ -95,11 +95,46 @@ export default function PickupStation() {
     return () => clearInterval(interval);
   }, []);
 
+
+const [returnedData, setReturnedData] = useState(null);
+
+useEffect(() => {
+  const fetchPlateData = async () => {
+    try {
+      const response = await fetch('http://10.245.249.15:25565/plate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          license_plate: 'ABC123',
+          plate_state: 'TX',
+        }),
+      });
+
+      const result = await response.json();
+
+      setReturnedData(result);
+
+      console.log('Returned plate data:', result);
+    } catch (error) {
+      console.error('Error fetching plate data:', error);
+    }
+  };
+
+  fetchPlateData();
+
+  const interval = setInterval(fetchPlateData, 2000);
+
+  return () => clearInterval(interval);
+}, []);
+
 ///////////////////////////////////////////////////////////////////////////
 
 const sendTestData = async () => {
   try {
-    const response = await fetch('http://10.247.252.228:25565/data', {
+    const response = await fetch('http://10.245.249.15:25565/data', {
+    // const response = await fetch('http://10.247.252.228:25565/data', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -155,6 +190,98 @@ const sendTestData = async () => {
   ))
 )}
 
+{returnedData === null ? (
+  <p>No returned plate data yet</p>
+) : returnedData.error ? (
+  <p>{returnedData.error}</p>
+) : (
+  <div style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
+    <p>Station: {returnedData.station}</p>
+    <p>Plate: {returnedData.license_plate}</p>
+    <p>State: {returnedData.plate_state}</p>
+
+    <h4>Students:</h4>
+    {returnedData.students.map((student, index) => (
+      <div key={index} style={{ marginLeft: 10 }}>
+        <p>Name: {student.name}</p>
+        <p>Parent: {student.parent}</p>
+      </div>
+    ))}
+  </div>
+)}
+
+
+
+      {/* Dropdown */}
+      <div className="dropdown-container">
+        <label htmlFor="color-select">Select Color:</label>
+
+        <select
+          id="color-select"
+          className="dropdown"
+          value={selectedStation?.id ?? ""}
+          onChange={(e) => {
+            const id = Number(e.target.value);
+            const found = stations.find((s) => s.id === id);
+            setSelectedStation(found || null);
+          }}
+          disabled={loading || stations.length === 0}
+        >
+          {loading && <option value="">Loading...</option>}
+          {!loading && stations.length === 0 && <option value="">No stations found</option>}
+          {!loading &&
+            stations.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.color}
+              </option>
+            ))}
+        </select>
+      </div>
+
+      {errorMsg && <p className="station-error">{errorMsg}</p>}
+
+      {/* Card */}
+      <div className="kids-layout">
+        <div className="modules-grid">
+          {selectedColor ? (
+            <div className={`module-card ${selectedColor.toLowerCase()}`}>
+              <div className="card-content">
+                <h2>{selectedColor}</h2>
+
+                <table className="module-table">
+                  <tbody>
+                    {data.length === 0 ? (
+                      <tr>
+                        <td colSpan="3" style={{ textAlign: "center" }}>
+                          No kids currently
+                        </td>
+                      </tr>
+                    ) : (
+                      data.map((kid, index) => (
+                        <tr key={index}>
+                          <td className="row-number">{index + 1}</td>
+                          <td className="kid-cell">{kid.name}</td>
+                          <td style={{ width: 60, textAlign: "center" }}>
+                            <button className="pickup-btn" onClick={() => handlePickup(index)}>
+                              ✅
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <p style={{ color: "white" }}>Select a station to view kids.</p>
+          )}
+        </div>
+      </div>
+
     </div>
+
+
+
   );
 }
