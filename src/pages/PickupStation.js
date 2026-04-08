@@ -73,7 +73,7 @@ export default function PickupStation() {
     const fetchData = async () => {
       try {
         // const response = await fetch('http://192.168.60.128:25565/data');
-        const response = await fetch('http://10.245.249.15:25565/data');
+        const response = await fetch('http://10.245.249.15:3000/data');
         const result = await response.json();
         setData(result);
         // setData(result);
@@ -96,44 +96,44 @@ export default function PickupStation() {
   }, []);
 
 
-const [returnedData, setReturnedData] = useState(null);
+// const [returnedData, setReturnedData] = useState(null);
 
-useEffect(() => {
-  const fetchPlateData = async () => {
-    try {
-      const response = await fetch('http://10.245.249.15:25565/plate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          license_plate: 'ABC123',
-          plate_state: 'TX',
-        }),
-      });
+// useEffect(() => {
+//   const fetchPlateData = async () => {
+//     try {
+//       const response = await fetch('http://10.245.249.15:3000/plate', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           license_plate: 'ABC123',
+//           plate_state: 'TX',
+//         }),
+//       });
 
-      const result = await response.json();
+//       const result = await response.json();
 
-      setReturnedData(result);
+//       setReturnedData(result);
 
-      console.log('Returned plate data:', result);
-    } catch (error) {
-      console.error('Error fetching plate data:', error);
-    }
-  };
+//       console.log('Returned plate data:', result);
+//     } catch (error) {
+//       console.error('Error fetching plate data:', error);
+//     }
+//   };
 
-  fetchPlateData();
+//   fetchPlateData();
 
-  const interval = setInterval(fetchPlateData, 2000);
+//   const interval = setInterval(fetchPlateData, 2000);
 
-  return () => clearInterval(interval);
-}, []);
+//   return () => clearInterval(interval);
+// }, []);
 
 ///////////////////////////////////////////////////////////////////////////
 
 const sendTestData = async () => {
   try {
-    const response = await fetch('http://10.245.249.15:25565/data', {
+    const response = await fetch('http://10.245.249.15:3000/data', {
     // const response = await fetch('http://10.247.252.228:25565/data', {
       method: 'POST',
       headers: {
@@ -190,7 +190,7 @@ const sendTestData = async () => {
   ))
 )}
 
-{returnedData === null ? (
+{/* {returnedData === null ? (
   <p>No returned plate data yet</p>
 ) : returnedData.error ? (
   <p>{returnedData.error}</p>
@@ -208,7 +208,7 @@ const sendTestData = async () => {
       </div>
     ))}
   </div>
-)}
+)} */}
 
 
 
