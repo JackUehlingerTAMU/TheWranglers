@@ -11,7 +11,7 @@ function VolunteerLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const validCode = getVolunteerCode(); // ← use your new function
+    const validCode = getVolunteerCode(); 
 
     if (code === String(validCode)) {
       navigate("/pickup-station");

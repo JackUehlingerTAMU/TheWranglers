@@ -874,3 +874,26 @@ th {
     font-size: 16px;
   }
 }
+
+
+/* ===== LOADING BUTTON ====== */
+.loader-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader {
+  width: 4em;
+  height: 4em;
+  border: .5em solid white;
+  border-top: .5em solid transparent; /*adds a gap*/
+  border-radius: 100%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

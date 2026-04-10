@@ -1,5 +1,9 @@
-import { supabase } from "../supabaseClient";
-import "../App.css"
+import { supabase } from "../supabaseClient"; // Supabase Database
+import "../App.css" // CSS
+/**
+ * 
+ * @returns Header for the page, used on the Parent Portal
+ */
 export default function Header(){
     const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();

@@ -180,7 +180,7 @@ const sendTestData = async () => {
       <button onClick={sendTestData}>Send Test Data</button>
 
       {/* //////////////////////////////// */}
-    {data.length === 0 ? (
+    {/* {data.length === 0 ? (
   <p>No students yet</p>
 ) : (
   data.map((student, index) => (
@@ -189,7 +189,7 @@ const sendTestData = async () => {
       <p>Parent: {student.parent}</p>
     </div>
   ))
-)}
+)} */}
 
 {/* {returnedData === null ? (
   <p>No returned plate data yet</p>
