@@ -5,20 +5,14 @@ import { supabase } from "../supabaseClient";
 
 export default function PickupStation() {
   const navigate = useNavigate();
+  const API_BASE = "'https://wranglers-capstone.onrender.com'"
+  //const API_BASE = "http://localhost:25565";
 
   const [stations, setStations] = useState([]);
   const [selectedStation, setSelectedStation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-
-  const [kidsData, setKidsData] = useState({});
-
-  const defaultKidsForColor = (color) => [
-    `${color} Kid 1`,
-    `${color} Kid 2`,
-    `${color} Kid 3`,
-    `${color} Kid 4`,
-  ];
+  const [data, setData] = useState([]);
 
   const fetchStations = async () => {
     setLoading(true);
@@ -40,139 +34,108 @@ export default function PickupStation() {
     const list = data || [];
     setStations(list);
 
-    // pick first station by default (should be Red id=1)
     if (list.length > 0) {
       setSelectedStation((prev) => prev ?? list[0]);
-
-      // ensure kidsData has entries for each station color
-      // setKidsData((prev) => {
-      //   const copy = { ...prev };
-      //   for (const s of list) {
-      //     // if (!copy[s.color]) copy[s.color] = defaultKidsForColor(s.color);
-      //   }
-      //   return copy;
-      // });
     }
 
     setLoading(false);
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/data`);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to fetch data");
+      }
+
+      setData(result);
+      console.log("Fetched data:", result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchStations();
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const sendTestData = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "John Doe",
+          parent: "Jane Doe",
+        }),
+      });
 
-///////////////////////////// TESTING STUDENT PICKUP SERVER CONNECTION ///////////
+      const result = await response.json();
 
-
-
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const response = await fetch('http://192.168.60.128:25565/data');
-        const response = await fetch('https://wranglers-capstone.onrender.com/data');
-        // const response = await fetch('http://localhost:25565/data');
-
-        const result = await response.json();
-        setData(result);
-        // setData(result);
-        
-        
-        console.log(result);
-
-        
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to add kid");
       }
-    };
 
-    fetchData();
+      setData((prev) => [...prev, result.data]);
+      console.log("Sent test data:", result.data);
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
+  };
 
-    // Refresh
-    const interval = setInterval(fetchData, 2000);
+  const handlePickup = async (kidToRemove) => {
+    try {
+      const response = await fetch(`${API_BASE}/data`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: kidToRemove.name,
+          parent: kidToRemove.parent,
+          station: kidToRemove.station,
+        }),
+      });
 
-    return () => clearInterval(interval);
-  }, []);
+      const result = await response.json();
 
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to remove kid");
+      }
 
-// const [returnedData, setReturnedData] = useState(null);
+      setData((prev) => {
+        const index = prev.findIndex(
+          (kid) =>
+            kid.name === kidToRemove.name &&
+            kid.parent === kidToRemove.parent &&
+            kid.station === kidToRemove.station
+        );
 
-// useEffect(() => {
-//   const fetchPlateData = async () => {
-//     try {
-//       const response = await fetch('http://10.245.249.15:3000/plate', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           license_plate: 'ABC123',
-//           plate_state: 'TX',
-//         }),
-//       });
+        if (index === -1) return prev;
 
-//       const result = await response.json();
+        const updated = [...prev];
+        updated.splice(index, 1);
+        return updated;
+      });
 
-//       setReturnedData(result);
-
-//       console.log('Returned plate data:', result);
-//     } catch (error) {
-//       console.error('Error fetching plate data:', error);
-//     }
-//   };
-
-//   fetchPlateData();
-
-//   const interval = setInterval(fetchPlateData, 2000);
-
-//   return () => clearInterval(interval);
-// }, []);
-
-///////////////////////////////////////////////////////////////////////////
-
-const sendTestData = async () => {
-  try {
-    // const response = await fetch('http://192.168.60.128:3000/data', {
-    const response = await fetch('https://wranglers-capstone.onrender.com/data', {
-      // const response = await fetch('http://localhost:25565/data', {
-    // const response = await fetch('http://10.247.252.228:25565/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: 'John Doe',
-        parent: 'Jane Doe',
-      }),
-    });
-
-    const text = await response.text();
-    console.log(text);
-  } catch (error) {
-    console.error('Error sending data:', error);
-  }
-};
-
-
-
+      console.log("Picked up:", result.removed);
+    } catch (error) {
+      console.error("Pickup error:", error);
+    }
+  };
 
   const selectedColor = selectedStation?.color || "";
-  const selectedKids = kidsData[selectedColor] || [];
   const selectedIndex = stations.findIndex((s) => s.color === selectedColor);
-  // const selectedKids =  [data.name] || [];
-
-  const handlePickup = (index) => {
-    if (!selectedColor) return;
-
-    setKidsData((prev) => {
-      const updated = { ...prev };
-      updated[selectedColor] = (updated[selectedColor] || []).filter((_, i) => i !== index);
-      return updated;
-    });
-  };
+  const filteredKids =
+    selectedIndex === -1
+      ? []
+      : data.filter((kid) => kid.station === selectedIndex + 1);
 
   return (
     <div className="pickup-station">
@@ -181,43 +144,9 @@ const sendTestData = async () => {
       <button className="back-btn" onClick={() => navigate(-1)}>
         Back
       </button>
+
       <button onClick={sendTestData}>Send Test Data</button>
 
-      {/* //////////////////////////////// */}
-    {/* {data.length === 0 ? (
-  <p>No students yet</p>
-) : (
-  data.map((student, index) => (
-    <div key={index} style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
-      <p>Name: {student.name}</p>
-      <p>Parent: {student.parent}</p>
-    </div>
-  ))
-)} */}
-
-{/* {returnedData === null ? (
-  <p>No returned plate data yet</p>
-) : returnedData.error ? (
-  <p>{returnedData.error}</p>
-) : (
-  <div style={{ border: "1px solid #ccc", margin: 5, padding: 5 }}>
-    <p>Station: {returnedData.station}</p>
-    <p>Plate: {returnedData.license_plate}</p>
-    <p>State: {returnedData.plate_state}</p>
-
-    <h4>Students:</h4>
-    {returnedData.students.map((student, index) => (
-      <div key={index} style={{ marginLeft: 10 }}>
-        <p>Name: {student.name}</p>
-        <p>Parent: {student.parent}</p>
-      </div>
-    ))}
-  </div>
-)} */}
-
-
-
-      {/* Dropdown */}
       <div className="dropdown-container">
         <label htmlFor="color-select">Select Color:</label>
 
@@ -233,7 +162,9 @@ const sendTestData = async () => {
           disabled={loading || stations.length === 0}
         >
           {loading && <option value="">Loading...</option>}
-          {!loading && stations.length === 0 && <option value="">No stations found</option>}
+          {!loading && stations.length === 0 && (
+            <option value="">No stations found</option>
+          )}
           {!loading &&
             stations.map((s) => (
               <option key={s.id} value={s.id}>
@@ -245,41 +176,41 @@ const sendTestData = async () => {
 
       {errorMsg && <p className="station-error">{errorMsg}</p>}
 
-      {/* Card */}
       <div className="kids-layout">
         <div className="modules-grid">
           {selectedColor ? (
             <div className={`module-card ${selectedColor.toLowerCase()}`}>
               <div className="card-content">
-                
                 <h2>{selectedColor}</h2>
 
-                <table className="module-table">
-                  <tbody>
-                    {data.length === 0 ? (
-                      <tr>
-                        <td colSpan="3" style={{ textAlign: "center" }}>
-                          No kids currently
-                        </td>
-                      </tr>
-                    ) : (
-                      // Filter then map so only get kids I need
-                     
-                      data.filter((kid) => kid.station === selectedIndex+1)
-                      .map((kid, index) => (
-                        <tr key={index}>
-                          <td className="row-number">{index + 1}</td>
-                          <td className="kid-cell">{kid.name}</td>
-                          <td style={{ width: 60, textAlign: "center" }}>
-                            <button className="pickup-btn" onClick={() => handlePickup(index)}>
-                              ✅
-                            </button>
+                <div className="table-scroll">
+                  <table className="module-table">
+                    <tbody>
+                      {filteredKids.length === 0 ? (
+                        <tr>
+                          <td colSpan="3" style={{ textAlign: "center" }}>
+                            No kids currently
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                      ) : (
+                        filteredKids.map((kid, index) => (
+                          <tr key={`${kid.name}-${kid.parent}-${kid.station}-${index}`}>
+                            <td className="row-number">{index + 1}</td>
+                            <td className="kid-cell">{kid.name}</td>
+                            <td style={{ width: 60, textAlign: "center" }}>
+                              <button
+                                className="pickup-btn"
+                                onClick={() => handlePickup(kid)}
+                              >
+                                ✅
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           ) : (
@@ -287,10 +218,6 @@ const sendTestData = async () => {
           )}
         </div>
       </div>
-
     </div>
-
-
-
   );
 }
