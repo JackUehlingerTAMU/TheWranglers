@@ -5,7 +5,7 @@ import { supabase } from "../supabaseClient";
 
 export default function PickupStation() {
   const navigate = useNavigate();
-  const API_BASE = "'https://wranglers-capstone.onrender.com'"
+  const API_BASE = "https://wranglers-capstone.onrender.com"
   //const API_BASE = "http://localhost:25565";
 
   const [stations, setStations] = useState([]);
