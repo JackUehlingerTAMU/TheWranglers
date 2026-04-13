@@ -65,6 +65,7 @@ export default function Home(){
 
   return (
     <div className="app">
+      <img src="/mascot.png" alt="Mascot" className="mascot-img" />
       <h1 className="title">Pebble Creek Elementary</h1>
 
       {parentError && <p>{parentError}</p>}

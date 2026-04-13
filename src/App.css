@@ -906,3 +906,30 @@ th {
     transform: rotate(360deg);
   }
 }
+
+.mascot-img {
+  width: 140px;
+  max-width: 50%;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+/* Center layout nicely */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .mascot-img {
+    width: 100px;
+    max-width: 70%;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+}
