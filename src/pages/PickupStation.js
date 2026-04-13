@@ -73,7 +73,9 @@ export default function PickupStation() {
     const fetchData = async () => {
       try {
         // const response = await fetch('http://192.168.60.128:25565/data');
-        const response = await fetch('https://wranglers-capstone.onrender.com/data');
+        //const response = await fetch('https://wranglers-capstone.onrender.com/data');
+        const response = await fetch('http://localhost:25565/data');
+
         const result = await response.json();
         setData(result);
         // setData(result);
@@ -134,7 +136,8 @@ export default function PickupStation() {
 const sendTestData = async () => {
   try {
     // const response = await fetch('http://192.168.60.128:3000/data', {
-    const response = await fetch('https://wranglers-capstone.onrender.com/data', {
+    // const response = await fetch('https://wranglers-capstone.onrender.com/data', {
+      const response = await fetch('http://localhost:25565/data', {
     // const response = await fetch('http://10.247.252.228:25565/data', {
       method: 'POST',
       headers: {
@@ -158,6 +161,7 @@ const sendTestData = async () => {
 
   const selectedColor = selectedStation?.color || "";
   const selectedKids = kidsData[selectedColor] || [];
+  const selectedIndex = stations.findIndex((s) => s.color === selectedColor);
   // const selectedKids =  [data.name] || [];
 
   const handlePickup = (index) => {
@@ -247,6 +251,7 @@ const sendTestData = async () => {
           {selectedColor ? (
             <div className={`module-card ${selectedColor.toLowerCase()}`}>
               <div className="card-content">
+                
                 <h2>{selectedColor}</h2>
 
                 <table className="module-table">
@@ -258,7 +263,10 @@ const sendTestData = async () => {
                         </td>
                       </tr>
                     ) : (
-                      data.map((kid, index) => (
+                      // Filter then map so only get kids I need
+                     
+                      data.filter((kid) => kid.station === selectedIndex+1)
+                      .map((kid, index) => (
                         <tr key={index}>
                           <td className="row-number">{index + 1}</td>
                           <td className="kid-cell">{kid.name}</td>

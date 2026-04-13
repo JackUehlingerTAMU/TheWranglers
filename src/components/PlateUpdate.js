@@ -1,5 +1,11 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../supabaseClient"; // Database
 import {useState} from "react";
+
+/**
+ * Parent License Plate Update
+ * @param {id} parent_id : Parent ID (to update plate)
+ * @returns Screen to update Parent Licence Plate
+ */
 export default function PlateUpdate({parent_id}){
     const US_STATES = [
         { name: "Alabama", abbr: "AL" },
@@ -57,55 +63,55 @@ export default function PlateUpdate({parent_id}){
     const idval=parentId.parent_id;
     const [plateNumber,setPlateNumber]= useState("");
     const [plateState,setPlateState]= useState("");
+
+    // Submit button to send to the info to database
     const handleSubmit= async (e) =>{
         e.preventDefault();
-        
+        // Format data
         const data= {
             plate_state: plateState,
             plate_number: plateNumber
         };
-        
+        // Send to database
         try{
-        const { error} =await supabase
-            .from("parent")
-            .update(data)
-            .eq("id", idval)
-            .select("*");
-        if(error){
-            console.error("Plate unable to be updated: ", error);
-            alert("Plate info failed update.")
+            const { error} =await supabase
+                .from("parent")
+                .update(data)
+                .eq("id", idval)
+                .select("*");
+            if(error){
+                console.error("Plate unable to be updated: ", error);
+                alert("Plate info failed update.")
+            }else{
+                alert("success");
+            }
         }
-        else{
-        
-            alert("success");
+        catch(error){
+            console.error("Error:", error);
+            alert("Failed to submit licence plate info.");
         }
     }
-    catch(error){
-        console.error("Error:", error);
-        alert("Failed to submit licence plate info.");
-    }
-    }
-            
-
-
-    return(<>
+    // Screen displaying plate update information
+    return(
+    <>
         <h2>Plate Update Information:</h2>
+        {/* Form to update the License Plate Information */}
         <form className="mini-form-container" onSubmit={handleSubmit} >
             <div className="form-column">
-            <label for="plate_state">Plate State:</label>
-            <select id="plate_state" name="plate_state" className="select_text" value={plateState} onChange={(e)=>setPlateState(e.target.value)}>
-            { US_STATES.map( state => 
-                <option key={state.name} value={state.abbr} >{state.name}</option>
-            )}
-            </select>
-            <label for="plate_number">Plate Number:</label>
-            <input type="text" id="plate_number" name="plate_number" onChange={(e)=>setPlateNumber(e.target.value)} />
-            
-            <input  className= "submit-btn" type="submit" value="Submit to School"></input>
+                {/* Plate State */}
+                <label for="plate_state">Plate State:</label>
+                <select id="plate_state" name="plate_state" className="select_text" value={plateState} onChange={(e)=>setPlateState(e.target.value)}>
+                { US_STATES.map( state => 
+                    <option key={state.name} value={state.abbr} >{state.name}</option>
+                )}
+                </select>
+                {/* Plate Number */}
+                <label for="plate_number">Plate Number:</label>
+                <input type="text" id="plate_number" name="plate_number" onChange={(e)=>setPlateNumber(e.target.value)} />
+                {/* Submit Button */}
+                <input  className= "submit-btn" type="submit" value="Submit to School"></input>
             </div>
         </form>
-
-        </>
-
+    </>
     );
 }

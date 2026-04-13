@@ -1,6 +1,10 @@
+/**
+ * QR Code Screen
+ * @param {*} licensePlate: License Plate to be displayed
+ * @returns a screen with a qr code to be scanned
+ */
 export default function QRcode({licensePlate}){
     const lp={licensePlate};
-    // const lps={plateState};
     const messageRequest=lp.licensePlate 
     
     const qrGen="https://quickchart.io/qr?text="+ messageRequest;
