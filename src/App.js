@@ -8,6 +8,7 @@ import PickupStation from "./pages/PickupStation";
 import Home from "./pages/Home"
 import CreateAccount from "./pages/CreateAccount";
 import VolunteerLogin from "./pages/VolunteerLogin";
+import Display from "./pages/Display";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path="/pickup-station" element={<PickupStation />} />
       <Route path="/create-account" element={<CreateAccount />} />
       <Route path="/volunteer-login" element={<VolunteerLogin />} />
+      <Route path="/display" element={<Display />} />
       </Routes>
     </>
     
