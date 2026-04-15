@@ -59,7 +59,7 @@ export default function Display() {
           setScreenState("success");
 
           // hold green screen for 5 seconds
-          setSuccessUntil(Date.now() + 5000);
+          setSuccessUntil(Date.now() + 3000);
           return;
         }
       }
@@ -99,7 +99,7 @@ export default function Display() {
     if (stations.length === 0) return;
 
     fetchDisplayStatus();
-    const interval = setInterval(fetchDisplayStatus, 1000);
+    const interval = setInterval(fetchDisplayStatus, 3000);
 
     return () => clearInterval(interval);
   }, [stations, successUntil]);
