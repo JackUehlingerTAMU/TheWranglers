@@ -6,8 +6,10 @@ export default function Display() {
   const API_BASE = "https://wranglers-capstone.onrender.com";
 
   const [stations, setStations] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("");
   const [screenState, setScreenState] = useState("scanning");
-  const [displayText, setDisplayText] = useState("Scanning QR Code");
+  const [displayText, setDisplayText] = useState("Please Scan QR Code");
+  const [successUntil, setSuccessUntil] = useState(0);
 
   const fetchStations = async () => {
     const { data, error } = await supabase
@@ -34,40 +36,56 @@ export default function Display() {
       }
 
       if (typeof result !== "string") {
+        if (Date.now() < successUntil) return;
         setScreenState("scanning");
-        setDisplayText("Scanning QR Code");
+        setDisplayText("Please Scan QR Code");
+        setSelectedColor("");
         return;
       }
 
-      // Grey screen state
-      if (result.includes("Please Scan QR Code")) {
-        setScreenState("scanning");
-        setDisplayText("Scanning QR Code");
-        return;
-      }
-
-      // Green screen state
+      // SUCCESS
       if (result.includes("Please Pull Forward To")) {
         const match = result.match(/To\s*(\d+)\s*Station/i);
 
         if (match) {
           const stationNumber = Number(match[1]);
-          const matchedStation = stations.find((s) => s.id === stationNumber);
-          const stationColor = matchedStation?.color || `Station ${stationNumber}`;
 
+          // SAME logic as PickupStation
+          const stationColor = stations[stationNumber - 1]?.color || "";
+
+          setSelectedColor(stationColor);
           setScreenState("success");
-          setDisplayText(`Go to station ${stationColor}`);
+
+          // hold green screen for 5 seconds
+          setSuccessUntil(Date.now() + 5000);
           return;
         }
       }
 
+      // SCANNING
+      if (result.includes("Please Scan QR Code")) {
+        if (Date.now() < successUntil) return;
+
+        setScreenState("scanning");
+        setDisplayText("Please Scan QR Code");
+        setSelectedColor("");
+        return;
+      }
+
       // fallback
+      if (Date.now() < successUntil) return;
+
       setScreenState("scanning");
-      setDisplayText("Scanning QR Code");
+      setDisplayText("Please Scan QR Code");
+      setSelectedColor("");
     } catch (error) {
       console.error("Display fetch error:", error);
+
+      if (Date.now() < successUntil) return;
+
       setScreenState("scanning");
-      setDisplayText("Scanning QR Code");
+      setDisplayText("Please Scan QR Code");
+      setSelectedColor("");
     }
   };
 
@@ -79,12 +97,18 @@ export default function Display() {
     if (stations.length === 0) return;
 
     fetchDisplayStatus();
-    const interval = setInterval(fetchDisplayStatus, 5000);
+    const interval = setInterval(fetchDisplayStatus, 1000);
 
     return () => clearInterval(interval);
-  }, [stations]);
+  }, [stations, successUntil]);
 
-  const backgroundColor = screenState === "success" ? "#2e7d32" : "#808080";
+  const backgroundColor =
+    screenState === "success" ? "#2e7d32" : "#808080";
+
+  const isSuccess = screenState === "success";
+
+  const line1 = isSuccess ? "GO TO STATION" : displayText;
+  const line2 = isSuccess ? selectedColor?.toUpperCase() : "";
 
   return (
     <div
@@ -100,16 +124,34 @@ export default function Display() {
         boxSizing: "border-box",
       }}
     >
-      <h1
-        style={{
-          color: "white",
-          fontSize: "clamp(2rem, 6vw, 5rem)",
-          lineHeight: 1.2,
-          margin: 0,
-        }}
-      >
-        {displayText}
-      </h1>
+      <div>
+        <h1
+          style={{
+            color: "white",
+            fontSize: "clamp(3rem, 8vw, 6rem)",
+            fontWeight: "bold",
+            margin: 0,
+            textShadow: "0 4px 20px rgba(0,0,0,0.5)",
+          }}
+        >
+          {line1}
+        </h1>
+
+        {isSuccess && (
+          <h2
+            style={{
+              color: selectedColor?.toLowerCase() || "white",
+              fontSize: "clamp(5rem, 14vw, 12rem)",
+              fontWeight: "900",
+              margin: 0,
+              textTransform: "uppercase",
+              textShadow: "0 6px 25px rgba(0,0,0,0.6)",
+            }}
+          >
+            {line2}
+          </h2>
+        )}
+      </div>
     </div>
   );
 }
