@@ -79,7 +79,7 @@ export default function Display() {
     if (stations.length === 0) return;
 
     fetchDisplayStatus();
-    const interval = setInterval(fetchDisplayStatus, 1000);
+    const interval = setInterval(fetchDisplayStatus, 5000);
 
     return () => clearInterval(interval);
   }, [stations]);
