@@ -51,7 +51,9 @@ export default function Display() {
           const stationNumber = Number(match[1]);
 
           // SAME logic as PickupStation
-          const stationColor = stations[stationNumber - 1]?.color || "";
+          const fixedStationNumber = ((stationNumber - 1) % stations.length) + 1;
+
+          const stationColor = stations[fixedStationNumber - 1]?.color || "";
 
           setSelectedColor(stationColor);
           setScreenState("success");
