@@ -6,6 +6,7 @@ import { useState, useEffect} from "react";
 function CreateAccount() {
   const navigate = useNavigate();
   const [googleid, setGoogleid]=useState(null);
+  const [plateError, setPlateError] = useState("");
 
   const [parent, setParent] = useState({
     firstName: "",
@@ -32,7 +33,22 @@ function CreateAccount() {
   };
 
   const handleParentChange = (e) => {
-    setParent({ ...parent, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "plateNumber") {
+      const cleaned = value.toUpperCase().replace(/\s/g, "");
+
+      if (cleaned.length > 7) {
+        setPlateError("License plate must be 7 characters or less");
+      } else {
+        setPlateError("");
+        setParent({ ...parent, [name]: cleaned });
+      }
+
+      return;
+    }
+
+    setParent({ ...parent, [name]: value });
   };
 
   const handleStudentChange = (index, e) => {
@@ -63,6 +79,11 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (parent.plateNumber.length > 7) {
+      setPlateError("License plate must be 7 characters or less");
+      return;
+    }
+
 
     try {
       const now = new Date();
@@ -141,6 +162,23 @@ useEffect(() => {
     }
   };
 
+  const isParentValid =
+  parent.firstName.trim() !== "" &&
+  parent.lastName.trim() !== "" &&
+  parent.plateNumber.trim() !== "" &&
+  parent.plateNumber.trim().length <= 7 &&
+  parent.plateState.trim() !== "" &&
+  parent.email.trim() !== "";
+
+  const areStudentsValid = students.every(
+    (student) =>
+      student.firstName.trim() !== "" &&
+      student.lastName.trim() !== "" &&
+      student.grade.trim() !== ""
+  );
+
+  const isFormValid = isParentValid && areStudentsValid && !plateError;
+
   return (
     <div className="create-account">
       <button className="back-btn" onClick={() => navigate(-1)}>
@@ -174,9 +212,16 @@ useEffect(() => {
           <input
             name="plateNumber"
             placeholder="Plate Number..."
+            value={parent.plateNumber}
             onChange={handleParentChange}
             required
           />
+
+          {plateError && (
+            <p style={{ color: "red", marginTop: "5px" }}>
+              {plateError}
+            </p>
+          )}
 
           <label>License Plate State *</label>
           <select name="plateState" className="select_text" onChange={handleParentChange} required>
@@ -309,7 +354,11 @@ useEffect(() => {
         </div>
       </div>
 
-      <button className="submit-btn" onClick={handleSubmit}>
+      <button
+        className="submit-btn"
+        onClick={handleSubmit}
+        disabled={!isFormValid}
+      >
         Submit to School
       </button>
     </div>

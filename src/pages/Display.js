@@ -4,6 +4,7 @@ import { supabase } from "../supabaseClient";
 
 export default function Display() {
   const API_BASE = "https://wranglers-capstone.onrender.com";
+  //const API_BASE = "http://localhost:25565";
 
   const [stations, setStations] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
@@ -19,7 +20,6 @@ export default function Display() {
 
     if (error) {
       console.error("Fetch stations error:", error);
-      setStations([]);
       return;
     }
 
@@ -43,28 +43,24 @@ export default function Display() {
         return;
       }
 
-      // SUCCESS
       if (result.includes("Please Pull Forward To")) {
         const match = result.match(/To\s*(\d+)\s*Station/i);
 
         if (match) {
           const stationNumber = Number(match[1]);
 
-          // SAME logic as PickupStation
-          const fixedStationNumber = ((stationNumber - 1) % stations.length) + 1;
+          
+          const stationColor = stations[stationNumber - 1]?.color || "";
 
-          const stationColor = stations[fixedStationNumber - 1]?.color || "";
-
-          setSelectedColor(stationColor);
-          setScreenState("success");
-
-          // hold green screen for 5 seconds
-          setSuccessUntil(Date.now() + 3000);
-          return;
+          if (stationColor) {
+            setSelectedColor(stationColor);
+            setScreenState("success");
+            setSuccessUntil(Date.now() + 3000);
+            return;
+          }
         }
       }
 
-      // SCANNING
       if (result.includes("Please Scan QR Code")) {
         if (Date.now() < successUntil) return;
 
@@ -74,7 +70,6 @@ export default function Display() {
         return;
       }
 
-      // fallback
       if (Date.now() < successUntil) return;
 
       setScreenState("scanning");
@@ -93,24 +88,26 @@ export default function Display() {
 
   useEffect(() => {
     fetchStations();
+    const stationInterval = setInterval(fetchStations, 3000);
+
+    return () => clearInterval(stationInterval);
   }, []);
 
   useEffect(() => {
     if (stations.length === 0) return;
 
     fetchDisplayStatus();
-    const interval = setInterval(fetchDisplayStatus, 3000);
+    const displayInterval = setInterval(fetchDisplayStatus, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(displayInterval);
   }, [stations, successUntil]);
 
   const backgroundColor =
     screenState === "success" ? "#2e7d32" : "#808080";
 
   const isSuccess = screenState === "success";
-
   const line1 = isSuccess ? "GO TO STATION" : displayText;
-  const line2 = isSuccess ? selectedColor?.toUpperCase() : "";
+  const line2 = isSuccess ? selectedColor.toUpperCase() : "";
 
   return (
     <div
@@ -142,7 +139,7 @@ export default function Display() {
         {isSuccess && (
           <h2
             style={{
-              color: selectedColor?.toLowerCase() || "white",
+              color: "white",
               fontSize: "clamp(5rem, 14vw, 12rem)",
               fontWeight: "900",
               margin: 0,

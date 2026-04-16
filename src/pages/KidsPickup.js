@@ -90,6 +90,12 @@ function KidsPickup() {
     // never remove the first station (your Red)
     if (station.id === 1 || station.color === "Red") return;
 
+    const confirmed = window.confirm(
+      `Are you sure you want to remove station ${station.color}?`
+    );
+
+    if (!confirmed) return;
+
     const { error } = await supabase
       .from("stations")
       .delete()
@@ -199,20 +205,21 @@ function KidsPickup() {
                         </button>
                       )}
                     </div>
-
-                    <table className="module-table">
-                      <tbody>
-                        
-                      {
-                      data.filter((kid) => kid.station === selectedIndex+1)
-                      .map((kid, index) => (
-                        <tr key={index}>
-                          <td className="row-number">{index + 1}</td>
-                          <td className="kid-cell">{kid.name}</td>
-                        </tr>))}
-                        
-                      </tbody>
-                    </table>
+                    <div className="tablescroll">
+                      <table className="module-table">
+                        <tbody>
+                          
+                        {
+                        data.filter((kid) => kid.station === selectedIndex+1)
+                        .map((kid, index) => (
+                          <tr key={index}>
+                            <td className="row-number">{index + 1}</td>
+                            <td className="kid-cell">{kid.name}</td>
+                          </tr>))}
+                          
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               );

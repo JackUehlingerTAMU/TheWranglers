@@ -20,38 +20,58 @@ function StaffPortal() {
   const [searchPlateNumber, setSearchPlateNumber] = useState("");
   const [filterPlateState, setFilterPlateState] = useState("");
 
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [showInvalidCredentialsModal, setShowInvalidCredentialsModal] = useState(false);
+
   // login check
   useEffect(() => {
     const loginCheck = async () => {
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError || !authData.user) {
-            navigate("/");
-            return;
-      }
-      console.log(authData.user.id);
-      const {data: adminData, error: adminError} = await supabase
-        .from("admin")
-        .select("id")
-        .eq("google_id", authData.user.id)
-        .single();
-    
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
 
-    if(adminError || !adminData){
-      navigate("/");
-      console.log(adminData);
-      console.log(adminError);
-      return;
-    }
-    await fetchStudentData();
-    
-  };
-  loginCheck();
-  },[navigate]);
+        if (authError || !authData.user) {
+          setShowInvalidCredentialsModal(true);
+          setIsAuthorized(false);
+          setIsAuthChecking(false);
+          return;
+        }
+
+        const { data: adminData, error: adminError } = await supabase
+          .from("admin")
+          .select("id")
+          .eq("google_id", authData.user.id)
+          .single();
+
+        if (adminError || !adminData) {
+          setShowInvalidCredentialsModal(true);
+          setIsAuthorized(false);
+          setIsAuthChecking(false);
+          return;
+        }
+
+        setIsAuthorized(true);
+        await fetchStudentData();
+        setIsAuthChecking(false);
+      } catch (error) {
+        console.error("Login check error:", error);
+        setShowInvalidCredentialsModal(true);
+        setIsAuthorized(false);
+        setIsAuthChecking(false);
+      }
+    };
+
+    loginCheck();
+  }, [navigate]);
 
   // useEffect(() => {
   //   fetchStudentData();
   // }, [navigate]);
   
+  const handleInvalidCredentialsClose = () => {
+    setShowInvalidCredentialsModal(false);
+    navigate("/");
+  };
 
   // get info from database
   const fetchStudentData = async () => {
@@ -178,31 +198,33 @@ function StaffPortal() {
       return;
     }
 
-    // extract student_id
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${recordToDelete.name}?`
+    );
+
+    if (!confirmed) return;
+
     const studentId = recordToDelete.student_id;
 
     try {
       // delete from parent_student table
-      const { data: joinData, error: joinError } = await supabase
+      const { error: joinError } = await supabase
         .from('parent_student')
         .delete()
-        .eq('id', id)
-        .select();
+        .eq('id', id);
 
       if (joinError) throw joinError;
 
       // delete from students table
-      const { data: studentData, error: studentError } = await supabase
+      const { error: studentError } = await supabase
         .from('students')
         .delete()
-        .eq('id', studentId)
-        .select();
+        .eq('id', studentId);
 
-      
       if (studentError) throw studentError;
 
       setStudents(students.filter((student) => student.id !== id));
-            
+
     } catch (error) {
       console.error("Error deleting record:", error.message);
       alert("Failed to delete record: " + error.message);
@@ -251,6 +273,31 @@ function StaffPortal() {
       if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
       return 0;
     });
+  if (isAuthChecking) {
+    return null;
+  }
+
+  if (!isAuthorized && showInvalidCredentialsModal) {
+    return (
+      <div className="modal-overlay">
+        <div
+          className="modal-content"
+          style={{ maxWidth: "420px", textAlign: "center" }}
+        >
+          <h2>Not valid credentials</h2>
+          <p>Your Google account is not authorized to access this page.</p>
+          <div
+            className="modal-actions"
+            style={{ marginTop: "20px", justifyContent: "center" }}
+          >
+            <button className="main-btn" onClick={handleInvalidCredentialsClose}>
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="staff-portal">
@@ -441,6 +488,19 @@ function StaffPortal() {
                 <button type="button" className="main-btn logout-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {showInvalidCredentialsModal && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: "420px", textAlign: "center" }}>
+            <h2>Not valid credentials</h2>
+            <p>Your Google account is not authorized to access this page.</p>
+            <div className="modal-actions" style={{ marginTop: "20px", justifyContent: "center" }}>
+              <button className="main-btn" onClick={handleInvalidCredentialsClose}>
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}
