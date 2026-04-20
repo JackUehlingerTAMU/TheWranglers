@@ -41,27 +41,45 @@ export default function PickupStation() {
     setLoading(false);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/data`);
-      const result = await response.json();
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetch(`${API_BASE}/data`);
+  //     const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to fetch data");
-      }
+  //     if (!response.ok) {
+  //       throw new Error(result.error || "Failed to fetch data");
+  //     }
 
-      setData(result);
-      console.log("Fetched data:", result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //     setData(result);
+  //     console.log("Fetched data:", result);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchStations();
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   fetchStations();
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+  // Getting The Student Data
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch('https://wranglers-capstone.onrender.com/data');
+          // const response = await fetch('http://localhost:25565/data');
+          const result = await response.json();
+          setData(result);
+          console.log(result);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+      // Refresh
+      const interval = setInterval(fetchData, 2000);
+      return () => clearInterval(interval);
+    }, []);
 
   
 
