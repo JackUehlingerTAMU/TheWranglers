@@ -282,13 +282,13 @@ function StaffPortal() {
       <div className="modal-overlay">
         <div
           className="modal-content"
-          style={{ maxWidth: "420px", textAlign: "center" }}
+          style={{ justifyContent:"center", textAlign: "center" }}
         >
           <h2>Not valid credentials</h2>
           <p>Your Google account is not authorized to access this page.</p>
           <div
             className="modal-actions"
-            style={{ marginTop: "20px", justifyContent: "center" }}
+            style={{ marginTop: "20px", justifyContent: "center", minWidth: "100%" }}
           >
             <button className="main-btn" onClick={handleInvalidCredentialsClose}>
               OK
