@@ -11,6 +11,7 @@ export default function Display() {
   const [screenState, setScreenState] = useState("scanning");
   const [displayText, setDisplayText] = useState("Please Scan QR Code");
   const [successUntil, setSuccessUntil] = useState(0);
+  const [lastSuccessTime, setLastSuccessTime] = useState(Date.now());
 
   const fetchStations = async () => {
     const { data, error } = await supabase
@@ -48,11 +49,23 @@ export default function Display() {
         setScreenState("noData");
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
+        setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
       if (typeof result !== "string") {
         if (Date.now() < successUntil) return;
+
+        if (Date.now() - lastSuccessTime > 45000) {
+          setScreenState("noData");
+          setDisplayText("No data found please head to WHITE station.");
+          setSelectedColor("");
+          setSuccessUntil(Date.now() + 3000);
+          setLastSuccessTime(Date.now());
+          return;
+        }
+
         setScreenState("scanning");
         setDisplayText("Please Scan QR Code");
         setSelectedColor("");
@@ -64,13 +77,13 @@ export default function Display() {
 
         if (match) {
           const stationNumber = Number(match[1]);
-
           const stationColor = stations[stationNumber - 1]?.color || "";
 
           if (stationColor) {
             setSelectedColor(stationColor);
             setScreenState("success");
             setSuccessUntil(Date.now() + 3000);
+            setLastSuccessTime(Date.now());
             return;
           }
         }
@@ -79,6 +92,15 @@ export default function Display() {
       if (result.includes("Please Scan QR Code")) {
         if (Date.now() < successUntil) return;
 
+        if (Date.now() - lastSuccessTime > 45000) {
+          setScreenState("noData");
+          setDisplayText("No data found please head to WHITE station.");
+          setSelectedColor("");
+          setSuccessUntil(Date.now() + 3000);
+          setLastSuccessTime(Date.now());
+          return;
+        }
+
         setScreenState("scanning");
         setDisplayText("Please Scan QR Code");
         setSelectedColor("");
@@ -86,6 +108,15 @@ export default function Display() {
       }
 
       if (Date.now() < successUntil) return;
+
+      if (Date.now() - lastSuccessTime > 45000) {
+        setScreenState("noData");
+        setDisplayText("No data found please head to WHITE station.");
+        setSelectedColor("");
+        setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
+        return;
+      }
 
       setScreenState("scanning");
       setDisplayText("Please Scan QR Code");
@@ -100,6 +131,17 @@ export default function Display() {
         setScreenState("noData");
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
+        setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
+        return;
+      }
+
+      if (Date.now() - lastSuccessTime > 45000) {
+        setScreenState("noData");
+        setDisplayText("No data found please head to WHITE station.");
+        setSelectedColor("");
+        setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
@@ -123,7 +165,7 @@ export default function Display() {
     const displayInterval = setInterval(fetchDisplayStatus, 1000);
 
     return () => clearInterval(displayInterval);
-  }, [stations, successUntil]);
+  }, [stations, successUntil, lastSuccessTime]);
 
   const backgroundColor =
     screenState === "success"
