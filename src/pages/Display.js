@@ -50,6 +50,7 @@ export default function Display() {
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
         setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
@@ -61,6 +62,7 @@ export default function Display() {
           setDisplayText("No data found please head to WHITE station.");
           setSelectedColor("");
           setSuccessUntil(Date.now() + 3000);
+          setLastSuccessTime(Date.now());
           return;
         }
 
@@ -95,6 +97,7 @@ export default function Display() {
           setDisplayText("No data found please head to WHITE station.");
           setSelectedColor("");
           setSuccessUntil(Date.now() + 3000);
+          setLastSuccessTime(Date.now());
           return;
         }
 
@@ -111,6 +114,7 @@ export default function Display() {
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
         setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
@@ -128,6 +132,7 @@ export default function Display() {
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
         setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
@@ -136,6 +141,7 @@ export default function Display() {
         setDisplayText("No data found please head to WHITE station.");
         setSelectedColor("");
         setSuccessUntil(Date.now() + 3000);
+        setLastSuccessTime(Date.now());
         return;
       }
 
