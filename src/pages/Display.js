@@ -27,8 +27,16 @@ export default function Display() {
   };
 
   const fetchDisplayStatus = async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     try {
-      const response = await fetch(`${API_BASE}/display`);
+      const response = await fetch(`${API_BASE}/display`, {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
       const result = await response.json();
 
       if (!response.ok) {
@@ -83,9 +91,17 @@ export default function Display() {
       setDisplayText("Please Scan QR Code");
       setSelectedColor("");
     } catch (error) {
+      clearTimeout(timeoutId);
       console.error("Display fetch error:", error);
 
       if (Date.now() < successUntil) return;
+
+      if (error.name === "AbortError") {
+        setScreenState("noData");
+        setDisplayText("No data found please head to WHITE station.");
+        setSelectedColor("");
+        return;
+      }
 
       setScreenState("scanning");
       setDisplayText("Please Scan QR Code");
