@@ -121,7 +121,7 @@ export default function PickupStation() {
         Back
       </button>
 
-      <button onClick={sendTestData}>Send Test Data</button>
+      
 
       <div className="dropdown-container">
         <label htmlFor="color-select">Select Color:</label>
