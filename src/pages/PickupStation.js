@@ -63,31 +63,7 @@ export default function PickupStation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const sendTestData = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/data`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "John Doe",
-          parent: "Jane Doe",
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to add kid");
-      }
-
-      setData((prev) => [...prev, result.data]);
-      console.log("Sent test data:", result.data);
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
-  };
+  
 
   const handlePickup = async (kidToRemove) => {
     try {
