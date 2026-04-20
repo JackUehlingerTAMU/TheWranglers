@@ -40,6 +40,9 @@ export default function PickupStation() {
 
     setLoading(false);
   };
+  useEffect(() => {
+    fetchStations();
+  }, []);
 
   // const fetchData = async () => {
   //   try {
@@ -62,11 +65,11 @@ export default function PickupStation() {
   //   fetchData();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
-  // Getting The Student Data
+
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('https://wranglers-capstone.onrender.com/data');
+          const response = await fetch(`${API_BASE}/data`);
           // const response = await fetch('http://localhost:25565/data');
           const result = await response.json();
           setData(result);
