@@ -35,6 +35,14 @@ export default function Display() {
         throw new Error("Failed to fetch display status");
       }
 
+      if (result === null) {
+        if (Date.now() < successUntil) return;
+        setScreenState("noData");
+        setDisplayText("No data found please head to WHITE station.");
+        setSelectedColor("");
+        return;
+      }
+
       if (typeof result !== "string") {
         if (Date.now() < successUntil) return;
         setScreenState("scanning");
@@ -49,7 +57,6 @@ export default function Display() {
         if (match) {
           const stationNumber = Number(match[1]);
 
-          
           const stationColor = stations[stationNumber - 1]?.color || "";
 
           if (stationColor) {
@@ -103,7 +110,11 @@ export default function Display() {
   }, [stations, successUntil]);
 
   const backgroundColor =
-    screenState === "success" ? "#2e7d32" : "#808080";
+    screenState === "success"
+      ? "#2e7d32"
+      : screenState === "noData"
+      ? "#000000"
+      : "#808080";
 
   const isSuccess = screenState === "success";
   const line1 = isSuccess ? "GO TO STATION" : displayText;
