@@ -2,9 +2,31 @@ import React, { useEffect, useMemo, useState } from "react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import { useRef } from "react";
+
+
 
 function KidsPickup() {
   const navigate = useNavigate();
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const lastSpokenRef = useRef("");
+  
+  
+ const speakWORDS = (text) => {
+  if (!window.speechSynthesis) return;
+
+  window.speechSynthesis.cancel(); // stop overlap
+
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.rate = 1;
+  msg.pitch = 1;
+  msg.volume = 1;
+
+  window.speechSynthesis.speak(msg);
+};
+
+
+
 
   ///// GLOBAL VARIABLES ///////
   const COLOR_OPTIONS = useMemo(() => [
@@ -41,11 +63,13 @@ function KidsPickup() {
       .from("stations")
       .select("id,color")
       .order("id", { ascending: true });
+    //  speakWORDS(data);
     if (error) {
       console.error("Fetch stations error:", error);
       setErrorMsg(error.message);
       setStations([]);
       setLoading(false);
+      // speakWORDS(data);
       return;
     }
     setStations(data || []);
@@ -130,6 +154,23 @@ function KidsPickup() {
     const interval = setInterval(fetchData, 2000);
     return () => clearInterval(interval);
   }, []);
+
+
+  useEffect(() => {
+  if (!voiceEnabled) return;
+  if (!data || data.length === 0) return;
+
+  const lastKid = data.at(-1);
+  if (!lastKid) return;
+
+  const message = `${lastKid.name} to station ${lastKid.station}`;
+
+  // prevent repeating same message
+  if (message !== lastSpokenRef.current) {
+    // speakWORDS(message);
+    lastSpokenRef.current = message;
+  }
+}, [data, voiceEnabled]);
 
   return (
     <div className="kids-pickup">
@@ -241,6 +282,7 @@ function KidsPickup() {
                   .at(-1);// last kid in the station
                 return (
                   <tr key={station.id}>
+                    {speakWORDS(lastKid.name + "go to station" + color)}
                     <td className={`color-cell ${colorClass}`}>{color}</td>
                     <td className="kid-cell">{lastKid ? lastKid.name : "--" }</td>
                   </tr>

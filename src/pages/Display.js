@@ -44,7 +44,7 @@ export default function Display() {
         throw new Error("Failed to fetch display status");
       }
 
-      if (result === null || result === "") {
+      if (result === null || result === "" || result === '') {
         if (Date.now() < successUntil) return;
         setScreenState("noData");
         setDisplayText("No data found please head to WHITE station.");
