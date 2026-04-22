@@ -8,8 +8,9 @@ import { useRef } from "react";
 
 function KidsPickup() {
   const navigate = useNavigate();
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
   const lastSpokenRef = useRef("");
+  const lastIdRef = useRef(null);
   
   
  const speakWORDS = (text) => {
@@ -163,14 +164,26 @@ function KidsPickup() {
   const lastKid = data.at(-1);
   if (!lastKid) return;
 
-  const message = `${lastKid.name} to station ${lastKid.station}`;
+  // prevent duplicates
+  // if (lastIdRef.current === lastKid.id) return;
 
-  // prevent repeating same message
-  if (message !== lastSpokenRef.current) {
-    // speakWORDS(message);
-    lastSpokenRef.current = message;
-  }
-}, [data, voiceEnabled]);
+  lastIdRef.current = lastKid.id;
+
+  const station = stations.find(
+    (s, i) => i + 1 === lastKid.station
+  );
+
+  const color = station?.color || "station";
+
+  const message = `${lastKid.name} go to ${color} station`;
+
+  window.speechSynthesis.cancel();
+
+  const msg = new SpeechSynthesisUtterance(message);
+  msg.rate = 0.9;
+
+  window.speechSynthesis.speak(msg);
+}, [data, voiceEnabled, stations]);
 
   return (
     <div className="kids-pickup">
@@ -282,7 +295,7 @@ function KidsPickup() {
                   .at(-1);// last kid in the station
                 return (
                   <tr key={station.id}>
-                    {speakWORDS(lastKid.name + "go to station" + color)}
+                    {/* {speakWORDS(lastKid.name + "go to station" + color)} */}
                     <td className={`color-cell ${colorClass}`}>{color}</td>
                     <td className="kid-cell">{lastKid ? lastKid.name : "--" }</td>
                   </tr>
